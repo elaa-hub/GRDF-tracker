@@ -10,9 +10,8 @@
     import org.springframework.web.bind.annotation.*;
 
     import java.util.List;
-    import java.util.Optional;
-    @CrossOrigin(origins = "http://localhost:4200") // Allow frontend
-    @RestController
+        @RestController
+    @CrossOrigin(origins = "http://localhost:4200")  // Allowing CORS only from the Angular frontend
     @RequestMapping("/api/tasks")
     public class TaskController {
         @Autowired
