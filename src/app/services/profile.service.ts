@@ -11,6 +11,6 @@ export class ProfileService {
   constructor(private http: HttpClient) {}
 
   addTask(techId: number, clientId: number, task: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${techId}/tasks/${clientId}`, task);
+    return this.http.post(`${this.apiUrl}/${tech}`, task);
   }
 }

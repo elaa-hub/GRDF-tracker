@@ -1,18 +1,32 @@
-.form-avatar {
-  float: left;
-  height: 120px;
-  width: 120px;
-  margin-right: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+.content-block {
+  margin-bottom: 20px;
+  border-radius: 12px;
   background-color: #fff;
-  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
 
-  img {
-    height: 120px;
-    display: block;
-    margin: 0 auto;
-  }
+h3 {
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.dx-button-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.dx-popup {
+  text-align: center;
+  font-size: 1.2rem;
 }

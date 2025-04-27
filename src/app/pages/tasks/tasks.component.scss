@@ -1,0 +1,45 @@
+.dx-card {
+  background: rgba(17, 17, 27, 0.95);
+  box-shadow: 0px 4px 20px rgba(0, 255, 255, 0.4);
+  border-radius: 15px;
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.dx-data-grid {
+  background: transparent !important;
+  color: #e0e0e0;
+  font-size: 15px;
+  border-radius: 12px;
+}
+
+.dx-header-row {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: #00ffff !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dx-row {
+  transition: all 0.3s ease-in-out;
+}
+
+.dx-row:hover {
+  background: rgba(0, 255, 255, 0.1);
+  transform: scale(1.02);
+}
+
+.dx-focused-row {
+  background: rgba(0, 255, 255, 0.2) !important;
+  box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.4);
+}
+
+.dx-cell {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dx-pager {
+  background: transparent !important;
+  color: #00ffff !important;
+}

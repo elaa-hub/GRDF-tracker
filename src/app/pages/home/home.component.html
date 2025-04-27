@@ -1,10 +1,43 @@
+<!-- home.component.html -->
 <div class="home-container">
-  <div class="logo-section">
-    <img src="assets/pics/GRDF.png" alt="GRDF Logo" class="logo animated">
+  <div class="floating-shapes">
+    <div>
+
+    </div>
+    <div></div>
   </div>
 
-  <div class="slogan">
-    <h1 class="fade-in">Bienvenue sur GRDF Tracker</h1>
-    <p class="fade-in delay">Suivez l'historique des réparations et des interventions en toute simplicité.</p>
+  <div class="content">
+    <div class="glass-card">
+      <div class="auth-header">
+        <img src="assets/pics/GRDF.png" alt="GRDF Logo" class="logo">
+        <h1>Bienvenue sur GRDF Tracker</h1>
+        <p>Suivi intelligent des interventions techniques</p>
+      </div>
+
+      <form class="login-form">
+        <div class="input-group">
+          <input
+            type="text"
+            class="input-field"
+            placeholder="Identifiant"
+            required
+          >
+        </div>
+
+        <div class="input-group">
+          <input
+            type="password"
+            class="input-field"
+            placeholder="Mot de passe"
+            required
+          >
+        </div>
+
+        <button type="submit" class="submit-btn">
+          Connexion Sécurisée
+        </button>
+      </form>
+    </div>
   </div>
 </div>

@@ -1,28 +1,40 @@
-<h2 class="content-block">Technicien Formulaire</h2>
+<h2 class="content-block">Tableau de Bord - Technicien</h2>
 
-<div class="content-block dx-card responsive-paddings">
-  <div class="form-avatar">
-    <img src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/{{employee.Picture}}" />
+  <div class="content-block dx-card responsive-paddings">
+  <h3>📊 Statistiques des Tâches</h3>
+  <dx-chart
+    [dataSource]="taskStats"
+    title="Tâches Réalisées par Jour">
+    <dxi-series
+      argumentField="day"
+      valueField="tasks"
+      name="Tâches"
+      type="bar">
+    </dxi-series>
+  </dx-chart>
+</div>
+
+<!-- Bouton pour afficher les détails du technicien -->
+<button (click)="showTechnicianDetails()" class="dx-button dx-button-success">
+  🛠 Voir Infos du Technicien
+</button>
+
+<!-- Fenêtre Modale (Popup) avec les détails du Technicien -->
+<dx-popup
+  [visible]="popupVisible"
+  [width]="600"
+  [height]="500"
+  [closeOnOutsideClick]="true"
+  title="Détails du Technicien">
+
+  <div class="content-block dx-card responsive-paddings">
+    <div class="form-avatar">
+      <img [src]="'assets/' + employee.Picture" alt="Technician">
+    </div>
+    <h3>{{employee.FirstName}} {{employee.LastName}}</h3>
+    <p><strong>📍 Adresse :</strong> {{employee.Address}}</p>
+    <p><strong>🔧 ID :</strong> {{employee.TechnicianID}}</p>
+    <p><strong>📅 Réparations :</strong> {{employee.RepairDate | date}}</p>
+    <p><strong>📝 Notes :</strong> {{employee.Notes}}</p>
   </div>
-  <span>{{employee.Notes}}</span>
-</div>
-
-<div class="content-block dx-card responsive-paddings">
-  <dx-form id="form"
-           [formData]="employee"
-           labelLocation="top"
-           [colCountByScreen]="colCountByScreen">
-
-    <dxi-item dataField="FirstName" label="Prénom"></dxi-item>
-    <dxi-item dataField="LastName" label="Nom"></dxi-item>
-    <dxi-item dataField="TechnicianID" label="ID de Technicien"></dxi-item>
-    <dxi-item dataField="Description" label="Description de la Panne">
-      <textarea [(ngModel)]="employee.Description" style="height: 80px;"></textarea>
-    </dxi-item>
-    <dxi-item dataField="Address" label="Adresse Maison"></dxi-item>
-    <dxi-item dataField="RepairDate" label="Date de Réparation">
-      <input type="date" [(ngModel)]="employee.RepairDate" />
-    </dxi-item>
-  </dx-form>
-</div>
-
+</dx-popup>

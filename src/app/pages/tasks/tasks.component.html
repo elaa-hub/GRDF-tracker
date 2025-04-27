@@ -1,4 +1,4 @@
-<h2 class="content-block">Tasks</h2>
+<h2 class="content-block">🚀 Tasks </h2>
 
 <dx-data-grid class="dx-card wide-card"
               [dataSource]="dataSource"
@@ -6,7 +6,8 @@
               [focusedRowEnabled]="true"
               [focusedRowIndex]="0"
               [columnAutoWidth]="true"
-              [columnHidingEnabled]="true">
+              [columnHidingEnabled]="true"
+              [rowAlternationEnabled]="true">
 
   <dxo-paging [pageSize]="10"></dxo-paging>
   <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
@@ -14,36 +15,37 @@
 
   <dxi-column
     dataField="taskId"
-    caption="Task ID"
+    caption="🆔 Task ID"
     [width]="90"
     [hidingPriority]="2">
   </dxi-column>
 
   <dxi-column
     dataField="description"
-    caption="Description"
-    [width]="190"
+    caption="📋 Description"
+    [width]="250"
     [hidingPriority]="8">
   </dxi-column>
 
   <dxi-column
     dataField="taskDate"
-    caption="Task Date"
+    caption="📅 Task Date"
     dataType="date"
     [hidingPriority]="3">
   </dxi-column>
 
   <dxi-column
     dataField="rating"
-    caption="Rating"
+    caption="⭐ Rating"
     [hidingPriority]="4">
   </dxi-column>
 
   <dxi-column
     dataField="tech.firstName"
-    caption="Assigned To"
+    caption="👨‍🔧 Assigned To"
     [allowSorting]="false"
     [hidingPriority]="7">
   </dxi-column>
+
 
 </dx-data-grid>

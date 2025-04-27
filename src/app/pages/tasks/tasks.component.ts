@@ -14,12 +14,12 @@ export class TasksComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const techID = 104;
+    const techID =101 ;
     this.getTasksByTechId(techID);
   }
 
   getTasksByTechId(techID: number): void {
-    this.http.get<any[]>(`http://localhost:8080/api/tasks/tech/${techID}`).subscribe(
+    this.http.get<any[]>(`http://localhost:8081/api/tasks/tech/${techID}`).subscribe(
       (tasks) => {
         this.dataSource = tasks.map(task => ({
           taskId: task.taskId,

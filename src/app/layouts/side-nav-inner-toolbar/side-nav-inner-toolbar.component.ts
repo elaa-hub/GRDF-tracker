@@ -55,6 +55,7 @@ export class SideNavInnerToolbarComponent implements OnInit {
     this.shaderEnabled = !isLarge;
   }
 
+
   toggleMenu = (e: DxToolbarTypes.ItemClickEvent) => {
     this.menuOpened = !this.menuOpened;
     e.event?.stopPropagation();
