@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginFormComponent, ResetPasswordFormComponent, CreateAccountFormComponent, ChangePasswordFormComponent } from './shared/components';
-import { AuthGuardService } from './shared/services';
+import { AuthGuard } from './shared/services';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
@@ -11,38 +11,45 @@ const routes: Routes = [
   {
     path: 'tasks',
     component: TasksComponent,
-    canActivate: [ AuthGuardService ]
+    canActivate: [AuthGuard]
   },
   {
     path: 'profile',
     component: ProfileComponent,
-    canActivate: [ AuthGuardService ]
+    canActivate: [AuthGuard]
   },
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [ AuthGuardService ]
   },
   {
     path: 'login-form',
     component: LoginFormComponent,
-    canActivate: [ AuthGuardService ]
+    canActivate: [AuthGuard]
   },
   {
     path: 'reset-password',
     component: ResetPasswordFormComponent,
-    canActivate: [ AuthGuardService ]
+    canActivate: [AuthGuard]
   },
   {
     path: 'create-account',
     component: CreateAccountFormComponent,
-    canActivate: [ AuthGuardService ]
+    canActivate: [AuthGuard]
   },
   {
     path: 'change-password/:recoveryCode',
     component: ChangePasswordFormComponent,
-    canActivate: [ AuthGuardService ]
+    canActivate: [AuthGuard]
   },
+
+  { path: 'client', loadChildren: () => import('./pages/client/client.module').then(m => m.ClientModule) },
+  {
+    path: 'tech',
+    loadChildren: () => import('./app/tech/tech.module').then(m => m.TechModule)
+  },
+
+
   {
     path: '**',
     redirectTo: 'home'
@@ -51,8 +58,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true }), DxDataGridModule, DxFormModule],
-  providers: [AuthGuardService],
-  exports: [RouterModule],
-
+  providers: [AuthGuard],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }

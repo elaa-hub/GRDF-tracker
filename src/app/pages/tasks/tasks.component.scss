@@ -1,45 +1,156 @@
-.dx-card {
-  background: rgba(17, 17, 27, 0.95);
-  box-shadow: 0px 4px 20px rgba(0, 255, 255, 0.4);
-  border-radius: 15px;
-  padding: 20px;
-  transition: all 0.3s ease-in-out;
+$grdf-primary: #005A9C;
+$grdf-accent: #6AB43E;
+$grdf-bg: #F5F7FA;
+$grdf-dark: #1F2937;
+$grdf-header-gradient: linear-gradient(90deg, #e3f2fd 0%, #bbdefb 100%);
+
+:host {
+  display: block;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: $grdf-bg;
 }
 
-.dx-data-grid {
-  background: transparent !important;
-  color: #e0e0e0;
+.background-blur {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: url('/assets/pics/tech.jpg') center/cover no-repeat;
+  filter: blur(18px) brightness(0.8);
+  opacity: 0.7;
+  animation: bgZoom 18s ease-in-out infinite alternate;
+}
+
+@keyframes bgZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+.tasks-glass {
+  max-width: 1100px;
+  margin: 3.5rem auto 2rem auto;
+  padding: 2.5rem 2rem 2rem 2rem;
+  background: rgba(255,255,255,0.75);
+  box-shadow: 0 8px 32px 0 rgba(31, 41, 55, 0.18);
+  border-radius: 28px;
+  backdrop-filter: blur(8px) saturate(1.2);
+  position: relative;
+  z-index: 1;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 2.2rem;
+
+  .logo {
+    width: 90px;
+    margin-bottom: 0.7rem;
+    animation: popIn 1s;
+    filter: drop-shadow(0 2px 8px rgba(0,90,156,0.18));
+  }
+
+  .title {
+    font-size: 2.3rem;
+    color: $grdf-primary;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 1px;
+    animation: fadeInDown 1s;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: $grdf-dark;
+    opacity: 0.7;
+    margin-bottom: 0;
+    animation: fadeIn 1.2s;
+  }
+}
+
+.task-grid-section {
+  margin-top: 1.5rem;
+}
+
+.dx-card.custom-task-grid {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 22px;
+  padding: 30px 24px;
+  box-shadow: 0 12px 28px rgba(0, 90, 156, 0.12);
+  border: 1px solid #dce6f1;
+  animation: fadeInUp 1s ease-in-out;
+}
+
+// Table styling
+::ng-deep .dx-data-grid {
+  font-size: 16px;
+  color: $grdf-dark;
+  background: $grdf-bg;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,90,156,0.08);
+  overflow: hidden;
+}
+
+::ng-deep .dx-header-row {
+  background: $grdf-header-gradient;
+  font-weight: 700;
+  color: $grdf-primary;
   font-size: 15px;
-  border-radius: 12px;
+  letter-spacing: 0.5px;
 }
 
-.dx-header-row {
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
-  color: #00ffff !important;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+::ng-deep .dx-row {
+  transition: background 0.2s ease, transform 0.15s ease;
+  &:hover {
+    background: #e0f7fa !important;
+    transform: scale(1.01);
+    cursor: pointer;
+  }
 }
 
-.dx-row {
-  transition: all 0.3s ease-in-out;
+::ng-deep .dx-focused-row {
+  background: linear-gradient(90deg, #b3e5fc, #e3f2fd) !important;
+  font-weight: 600;
+  animation: focusPulse 0.6s ease-in-out;
 }
 
-.dx-row:hover {
-  background: rgba(0, 255, 255, 0.1);
-  transform: scale(1.02);
+::ng-deep .dx-cell {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 12px 8px;
 }
 
-.dx-focused-row {
-  background: rgba(0, 255, 255, 0.2) !important;
-  box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.4);
+::ng-deep .dx-pager {
+  background: transparent;
+  color: $grdf-primary;
+  font-weight: 600;
+  margin-top: 10px;
+  font-size: 14px;
 }
 
-.dx-cell {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+// Animations
+@keyframes fadeInDown {
+  0% { transform: translateY(-20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes fadeInUp {
+  0% { transform: translateY(40px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  80% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes focusPulse {
+  0% { box-shadow: 0 0 0 0 $grdf-accent inset; }
+  70% { box-shadow: 0 0 0 6px rgba(106,180,62,0.18) inset; }
+  100% { box-shadow: 0 0 0 2px $grdf-accent inset; }
 }
 
-.dx-pager {
-  background: transparent !important;
-  color: #00ffff !important;
+// Responsive
+@media (max-width: 900px) {
+  .tasks-glass { padding: 1.2rem 0.5rem; }
+  .dx-card.custom-task-grid { padding: 16px 8px; border-radius: 14px; }
+  ::ng-deep .dx-data-grid { font-size: 14px; }
 }

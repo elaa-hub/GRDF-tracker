@@ -9,6 +9,7 @@
 .dx-validationsummary-item {
   cursor: pointer;
 }
+
 .dx-invalid-message.dx-overlay {
   position: relative;
 }

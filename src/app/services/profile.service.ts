@@ -10,7 +10,5 @@ export class ProfileService {
   private apiUrl = 'http://localhost:8080/api/techs';
   constructor(private http: HttpClient) {}
 
-  addTask(techId: number, clientId: number, task: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${tech}`, task);
-  }
+
 }

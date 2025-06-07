@@ -24,7 +24,7 @@ export class ProfileComponent {
       TechnicianID: 12345,
       FirstName: 'Sandra',
       LastName: 'Johnson',
-      Picture: 'images/employees/06.png',
+      Picture: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png',
       Notes: 'Technician Sandra est disponible pour réparations.',
       Address: '4600 N Virginia Rd.',
       Description: '',

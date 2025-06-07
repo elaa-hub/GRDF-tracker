@@ -2,35 +2,53 @@ import {Component, OnInit} from '@angular/core';
 import 'devextreme/data/odata/store';
 import { DxDataGridModule, DxLookupModule } from 'devextreme-angular';
 import {HttpClient} from '@angular/common/http';
+import {AuthService} from '../../shared/services';
 
 @Component({
-  templateUrl: 'tasks.component.html'
-})
+  selector: 'app-tasks',
+  templateUrl: './tasks.component.html',
+  styleUrls: ['./tasks.component.scss'] })
 
 export class TasksComponent implements OnInit {
   dataSource: any[] = [];
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   ngOnInit(): void {
-    const techID =101 ;
-    this.getTasksByTechId(techID);
+    const techId = this.authService.getUserId();
+    const role = this.authService.getUserRole();
+
+    console.log('🔍 TECH ID:', techId);
+    console.log('🔍 ROLE:', role);
+
+    if (techId && role === 'TECH') {
+      this.getTasksByTechId(techId);
+    } else {
+      console.warn('⚠️ Pas de TECH ID ou rôle incorrect.');
+    }
   }
 
+
   getTasksByTechId(techID: number): void {
-    this.http.get<any[]>(`http://localhost:8081/api/tasks/tech/${techID}`).subscribe(
+    const token = localStorage.getItem('token');
+    this.http.get<any[]>(`http://localhost:8081/api/tasks/tech/${techID}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .subscribe(
       (tasks) => {
+        console.log('📦 Données reçues :', tasks); // <= ajoute ceci
         this.dataSource = tasks.map(task => ({
           taskId: task.taskId,
           description: task.description,
-          taskDate: task.taskDate ? task.taskDate.split('T')[0] : null, // ✅ Extract "yyyy-MM-dd"
+          taskDate: task.taskDate?.split('T')[0],
           rating: task.rating,
-          tech: task.tech // Assuming task.tech contains 'firstName'
+          status: task.status
         }));
       },
       (error) => {
-        console.error('Error fetching tasks:', error);
+        console.error('Erreur récupération tâches :', error);
       }
     );
   }

@@ -1,0 +1,155 @@
+// Couleurs GRDF
+$grdf-primary: #005a9c;
+$grdf-accent: #6ab43e;
+$grdf-bg: #f5f7fa;
+$grdf-dark: #1f2937;
+
+// Arrière-plan animé et flou
+.background-blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  background: url('/assets/pics/tech.jpg') center/cover no-repeat;
+  filter: blur(18px) brightness(0.85);
+  opacity: 0.7;
+  animation: bgZoom 18s ease-in-out infinite alternate;
+}
+
+// Animation du fond
+@keyframes bgZoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+// Centrage de la page
+.fullpage-center {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+// Conteneur du formulaire (effet verre)
+.report-container {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 1s;
+  z-index: 1;
+}
+
+// Section en-tête (logo + titre)
+.header-section {
+  text-align: center;
+  margin-bottom: 1.5rem;
+
+  .logo {
+    width: 70px;
+    margin-bottom: 10px;
+    animation: popIn 1s;
+  }
+
+  .title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: $grdf-primary;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    opacity: 0.75;
+  }
+}
+
+// Formulaire et champs
+.defaillance-form {
+  .form-group {
+    margin-bottom: 1rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+  }
+
+  .action-btn {
+    background-color: $grdf-primary;
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 0.8rem;
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+      background-color: darken($grdf-primary, 10%);
+    }
+  }
+}
+
+// Animation d'apparition
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Responsive (mobile)
+@media (max-width: 600px) {
+  .report-container {
+    margin: 2rem 1rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+}
+

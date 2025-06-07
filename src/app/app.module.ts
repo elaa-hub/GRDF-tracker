@@ -9,17 +9,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { FormsModule } from '@angular/forms';
 import { DxDataGridModule, DxLookupModule } from 'devextreme-angular';
-import { TasksComponent } from './pages/tasks/tasks.component';
 import { DevExtremeModule } from 'devextreme-angular';
 import { NestedOptionHost } from 'devextreme-angular/core';
 import {HomeComponent} from './pages/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
+import {ClientComponent} from './pages/client/client.component';
+import {ReportIssueComponent} from './pages/client/report-issue/report-issue.component';
+import {RequestTechnicianComponent} from './pages/client/request-technician/request-technician.component';
+import {RequestListComponent} from './pages/client/request-list/request-list.component';
+import {QualifyInterventionComponent} from './pages/client/qualify-intervention/qualify-intervention.component';
+import {CommonModule} from '@angular/common';
+import {ClientRoutingModule} from './pages/client/client-routing.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProfileComponent,
-    TasksComponent,
     HomeComponent
   ],
   imports: [
@@ -38,7 +43,7 @@ import { HttpClientModule } from '@angular/common/http';
     DxLookupModule,
     FormsModule,
     DevExtremeModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 

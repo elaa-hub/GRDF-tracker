@@ -6,6 +6,7 @@ import { DxDrawerModule, DxDrawerTypes } from 'devextreme-angular/ui/drawer';
 import { DxScrollViewModule, DxScrollViewComponent } from 'devextreme-angular/ui/scroll-view';
 import { DxToolbarModule, DxToolbarTypes } from 'devextreme-angular/ui/toolbar';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { Router, NavigationEnd } from '@angular/router';
 
@@ -68,7 +69,6 @@ export class SideNavInnerToolbarComponent implements OnInit {
   get showMenuAfterClick() {
     return !this.menuOpened;
   }
-
   navigationChanged(event: DxTreeViewTypes.ItemClickEvent) {
     const path = (event.itemData as any).path;
     const pointerEvent = event.event;
@@ -78,7 +78,11 @@ export class SideNavInnerToolbarComponent implements OnInit {
         pointerEvent?.preventDefault();
       } else {
         this.router.navigate([path]);
-        this.scrollView.instance.scrollTo(0);
+
+        // ✅ Vérification que scrollView est bien défini avant de l'utiliser
+        if (this.scrollView?.instance) {
+          this.scrollView.instance.scrollTo(0);
+        }
       }
 
       if (this.hideMenuAfterNavigation) {
@@ -91,6 +95,7 @@ export class SideNavInnerToolbarComponent implements OnInit {
     }
   }
 
+
   navigationClick() {
     if (this.showMenuAfterClick) {
       this.temporaryMenuOpened = true;
@@ -100,7 +105,13 @@ export class SideNavInnerToolbarComponent implements OnInit {
 }
 
 @NgModule({
-  imports: [ SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxToolbarModule, DxScrollViewModule, CommonModule ],
+  imports: [     SideNavigationMenuModule,
+    DxDrawerModule,
+    HeaderModule,
+    DxToolbarModule,
+    DxScrollViewModule,
+    CommonModule,
+    RouterModule ],
   exports: [ SideNavInnerToolbarComponent ],
   declarations: [ SideNavInnerToolbarComponent ]
 })

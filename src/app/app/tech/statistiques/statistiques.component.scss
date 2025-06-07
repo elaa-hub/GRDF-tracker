@@ -1,0 +1,87 @@
+$grdf-primary: #005a9c;
+$grdf-accent: #6ab43e;
+$grdf-bg: #f5f7fa;
+$grdf-dark: #1f2937;
+
+:host {
+  display: block;
+  height: 100vh;
+  background-color: $grdf-bg;
+  position: relative;
+}
+
+.background-blur {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('/assets/pics/tech.jpg') center/cover no-repeat;
+  filter: blur(16px) brightness(0.85);
+  z-index: 0;
+  animation: bgZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes bgZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+.stats-container {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  width: 80px;
+  margin-bottom: 20px;
+  animation: popIn 1s;
+}
+
+.title {
+  color: $grdf-primary;
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  animation: fadeInDown 1s;
+}
+
+.stat-card {
+  background: white;
+  border-left: 6px solid $grdf-accent;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 90, 156, 0.1);
+  animation: fadeInUp 1.2s ease;
+
+  h3 {
+    margin: 0;
+    font-size: 2.4rem;
+    color: $grdf-primary;
+  }
+
+  p {
+    margin: 0.6rem 0 0;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+@keyframes fadeInUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeInDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  80% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}

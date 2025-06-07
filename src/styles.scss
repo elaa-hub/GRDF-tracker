@@ -1,1 +1,100 @@
-/* You can add global styles to this file, and also import other style files */
+/* === Variables GRDF === */
+$grdf-primary: #005A9C;         // Bleu GRDF
+$grdf-accent: #6AB43E;          // Vert GRDF
+$grdf-bg: #F5F7FA;              // Fond
+$grdf-text: #2C3E50;            // Texte foncé
+$grdf-dark: #1F2937;            // Sidebar
+
+/* === Base === */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: $grdf-bg;
+  color: $grdf-text;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* === Header / Navbar === */
+.layout-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100vw;
+  background-color: $grdf-primary;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  z-index: 1500;
+}
+
+/* === Layout Drawer (Sidebar + Content) === */
+.drawer {
+  display: flex;
+  height: 100vh;
+  padding-top: 60px; // laisse de l’espace pour la navbar
+}
+
+/* === Sidebar === */
+.dx-drawer-panel {
+  background-color: $grdf-dark !important;
+  color: white;
+}
+
+/* === Contenu principal centré === */
+.layout-body {
+  flex: 1;
+  background-color: $grdf-bg;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  min-height: calc(100vh - 60px);
+}
+
+/* === Contenu centré === */
+.content-wrapper {
+  text-align: center;
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: $grdf-text;
+  }
+
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .btn-action {
+    background-color: #655CFF;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-2px);
+      background-color: #4a3bff;
+    }
+    body {
+      background: linear-gradient(135deg, #e3f2fd, #f0f4f8);
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+  }
+}

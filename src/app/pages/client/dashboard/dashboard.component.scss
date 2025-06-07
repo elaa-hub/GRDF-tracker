@@ -1,0 +1,101 @@
+$grdf-primary: #005a9c;
+$grdf-accent: #6ab43e;
+$grdf-bg: #f5f7fa;
+
+.background-blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  background: url('/assets/pics/tech.jpg') center/cover no-repeat;
+  filter: blur(18px) brightness(0.85);
+  opacity: 0.7;
+  animation: bgZoom 18s ease-in-out infinite alternate;
+}
+
+@keyframes bgZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+.fullpage-center {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  padding: 0 1rem; // utile sur petits écrans
+}
+
+
+.report-container {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.header-section {
+  margin-bottom: 1.5rem;
+
+  .logo {
+    width: 80px;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: $grdf-primary;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    opacity: 0.75;
+  }
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .grdf-btn {
+    padding: 14px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    background-color: $grdf-primary;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: darken($grdf-primary, 10%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+    }
+
+    &.danger {
+      background-color: #dc3545;
+
+      &:hover {
+        background-color: darken(#dc3545, 10%);
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}

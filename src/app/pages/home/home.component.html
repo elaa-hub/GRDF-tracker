@@ -1,43 +1,16 @@
-<!-- home.component.html -->
-<div class="home-container">
-  <div class="floating-shapes">
-    <div>
+<div class="landing">
+  <div class="background-image"></div>
 
-    </div>
-    <div></div>
-  </div>
+  <div class="glass-container animate-in">
+    <img src="assets/pics/GRDF.png" class="logo" alt="GRDF Logo" />
+    <h1>Bienvenue sur <span class="highlight">GRDF Tracker</span></h1>
+    <p class="subtitle">Suivi intelligent des interventions techniques</p>
 
-  <div class="content">
-    <div class="glass-card">
-      <div class="auth-header">
-        <img src="assets/pics/GRDF.png" alt="GRDF Logo" class="logo">
-        <h1>Bienvenue sur GRDF Tracker</h1>
-        <p>Suivi intelligent des interventions techniques</p>
-      </div>
-
-      <form class="login-form">
-        <div class="input-group">
-          <input
-            type="text"
-            class="input-field"
-            placeholder="Identifiant"
-            required
-          >
-        </div>
-
-        <div class="input-group">
-          <input
-            type="password"
-            class="input-field"
-            placeholder="Mot de passe"
-            required
-          >
-        </div>
-
-        <button type="submit" class="submit-btn">
-          Connexion Sécurisée
-        </button>
-      </form>
-    </div>
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <input type="text" name="email" [(ngModel)]="email" placeholder="Email" required />
+      <input type="password" name="password" [(ngModel)]="password" placeholder="Mot de passe" required />
+      <div *ngIf="error" class="error-msg">{{ error }}</div>
+      <button type="submit" class="submit-btn">Connexion Sécurisée</button>
+    </form>
   </div>
 </div>
