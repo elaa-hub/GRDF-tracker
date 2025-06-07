@@ -1,4 +1,5 @@
 package org.grdfback.Entities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jdk.jfr.Description;
@@ -22,14 +23,15 @@ public class Task {
     private String description;
     private LocalDate taskDate;
     private Integer rating;
-
+    @Column(name = "status")
+    private String status;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "technician_id") // Matches "tech" field in Task
-    @JsonIgnore
+    @JoinColumn(name = "technician_id")
+    @JsonBackReference
     private Tech tech;
 
     @ManyToOne
-    @JoinColumn(name = "client_id") // Matches "client" field in Task
+    @JoinColumn(name = "client_id")
     @JsonIgnore
     private Client client;
     public void setTech(Tech tech) {

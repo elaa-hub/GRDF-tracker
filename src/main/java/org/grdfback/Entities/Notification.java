@@ -16,10 +16,10 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "clientId")
+    @JoinColumn(name = "client_id")
     private Client client;
+
 
     private boolean taskNeeded;
 

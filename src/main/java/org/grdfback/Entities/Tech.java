@@ -1,5 +1,7 @@
 package org.grdfback.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,12 +22,17 @@ public class Tech {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long techID;
 
-    private String firstName; // Changed from FirstName
+    private String firstName;
     private String lastName;
     private String picture;
     private String notes;
     private String address;
     private String descriptionTech;
-    @OneToMany(mappedBy = "tech")  // Ensure this matches the Task field
+    @OneToMany(mappedBy = "tech")
+    @JsonManagedReference
     private List<Task> tasks;
+
+    @Column(name = "is_busy")
+    private Boolean isBusy = false;
+
 }

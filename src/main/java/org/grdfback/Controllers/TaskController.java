@@ -14,36 +14,44 @@
     @CrossOrigin(origins = "http://localhost:4200")  // Allowing CORS only from the Angular frontend
     @RequestMapping("/api/tasks")
     public class TaskController {
-        @Autowired
-        private TaskRepository taskRepository;
-          @Autowired
-          private TaskService taskService;
+            @Autowired
+            private TaskService taskService;
 
-        // Get all tasks
-        @GetMapping
-        public List<Task> getAllTasks() {
-            List<Task> tasks = taskService.getAllTasks();
-            if (tasks.isEmpty()) {
-                System.out.println("No tasks found in the database.");
+            // 🔹 Toutes les tâches
+            @GetMapping
+            public List<Task> getAllTasks() {
+                return taskService.getAllTasks();
             }
-            return tasks;
-        }
 
-        // Get task by ID
-        @GetMapping("/{taskId}")
-        public ResponseEntity<Task> getTaskById(@PathVariable Long taskId) {
-            return taskService.getTaskById(taskId)
-                    .map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
-        }
+            // 🔹 Tâche par ID
+            @GetMapping("/{taskId}")
+            public ResponseEntity<Task> getTaskById(@PathVariable Long taskId) {
+                return taskService.getTaskById(taskId)
+                        .map(ResponseEntity::ok)
+                        .orElse(ResponseEntity.notFound().build());
+            }
 
-        // Create a new task
-        @PostMapping("/")
-        public Task createTask(@RequestBody Task task) {
-            return taskService.createTask(task);
+            // 🔹 Créer une nouvelle tâche
+            @PostMapping("/")
+            public Task createTask(@RequestBody Task task) {
+                return taskService.createTask(task);
+            }
+
+            // 🔹 Toutes les tâches notées pour un technicien
+            @GetMapping("/tech/{techID}/rated")
+            public ResponseEntity<List<Task>> getRatedTasksByTech(@PathVariable Long techID) {
+                return ResponseEntity.ok(taskService.getRatedTasksByTechId(techID));
+            }
+
+            // 🔹 Compter les tâches d’un technicien
+            @GetMapping("/tech/{techId}/count")
+            public long getTaskCountByTech(@PathVariable Long techId) {
+                return taskService.countTasksByTechId(techId);
+            }
+
+            // 🔹 Tâches d’un technicien
+            @GetMapping("/tech/{techId}")
+            public ResponseEntity<List<Task>> getTasksByTechId(@PathVariable Long techId) {
+                return ResponseEntity.ok(taskService.getTasksByTechId(techId));
+            }
         }
-        @GetMapping("/tech/{techID}")
-        public List<Task> getTasksByTech(@PathVariable Long techID) {
-            return taskService.getTasksByTechId(techID);
-        }
-    }

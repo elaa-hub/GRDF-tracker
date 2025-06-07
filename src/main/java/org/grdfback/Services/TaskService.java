@@ -29,7 +29,17 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public List<Task> getTasksByTechId(Long techID) {
-        return taskRepository.findByTech_TechID(techID);
+    public List<Task> getTasksByTechId(Long techId) {
+        return taskRepository.findByTech_TechID(techId);
     }
+
+
+    public List<Task> getRatedTasksByTechId(Long techID) {
+        return taskRepository.findByTech_TechIDAndRatingIsNotNull(techID);
     }
+    public long countTasksByTechId(Long techID) {
+        return taskRepository.countByTech_TechID(techID);
+    }
+
+}
+
