@@ -81,7 +81,7 @@ public class TechService {
             // Set the properties of the task
             task.setTech(tech);
             task.setClient(client);
-            task.setTaskDate(LocalDate.now());  // Set the current date for the task
+            task.setTaskDate(LocalDate.now());
 
             // Save the task
             return taskRepository.save(task);
