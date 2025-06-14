@@ -53,7 +53,7 @@ public class TechService {
             return taskRepository.save(task);
         }
 
-        throw new IllegalArgumentException("Technician or Client not found.");
+        throw new IllegalArgumentException("User not found.");
     }
 
 
