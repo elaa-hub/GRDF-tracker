@@ -30,7 +30,6 @@ private TaskRepository taskRepository;
         // Get notifications where task_needed is true
         List<Notification> notifications = notificationRepository.findByTaskNeededTrueAndTechnician(tech);
 
-        // Map notifications to clients and return relevant information
         return notifications.stream()
                 .map(notification -> notification.getClient()) // Get the client from the notification
                 .distinct() // Ensure no duplicate clients are returned
