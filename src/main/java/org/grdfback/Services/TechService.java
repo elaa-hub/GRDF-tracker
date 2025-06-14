@@ -74,7 +74,6 @@ public class TechService {
 
             System.out.println("Task before saving: " + task);  // Or use a logger here
 
-            // Validate task description
             if (task.getDescription() == null || task.getDescription().isEmpty()) {
                 throw new IllegalArgumentException("Description obligatoire.");
             }
