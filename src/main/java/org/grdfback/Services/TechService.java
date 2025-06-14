@@ -82,7 +82,6 @@ public class TechService {
             task.setClient(client);
             task.setTaskDate(LocalDate.now());
 
-            // Save the task
             return taskRepository.save(task);
         }
 
