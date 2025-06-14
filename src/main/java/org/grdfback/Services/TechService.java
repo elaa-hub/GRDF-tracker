@@ -70,13 +70,13 @@ public class TechService {
         if (techOpt.isPresent() && notificationOpt.isPresent()) {
             Tech tech = techOpt.get();
             Notification notification = notificationOpt.get();
-            Client client = notification.getClient();  // The client is linked via the notification
+            Client client = notification.getClient();
 
             System.out.println("Task before saving: " + task);  // Or use a logger here
 
             // Validate task description
             if (task.getDescription() == null || task.getDescription().isEmpty()) {
-                throw new IllegalArgumentException("Description is required.");
+                throw new IllegalArgumentException("Description obligatoire.");
             }
 
             // Set the properties of the task
