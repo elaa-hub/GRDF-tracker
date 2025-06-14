@@ -58,8 +58,7 @@ public class TechService {
 
 
     public List<Task> getTasksForClient(Long clientId) {
-        return taskRepository.findByClient_ClientId(clientId);  // Corrected to match the field name
-    }
+        return taskRepository.findByClient_ClientId(clientId);  }
 
 
     @Transactional
