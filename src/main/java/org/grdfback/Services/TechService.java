@@ -72,7 +72,7 @@ public class TechService {
             Notification notification = notificationOpt.get();
             Client client = notification.getClient();
 
-            System.out.println("Task before saving: " + task);  // Or use a logger here
+            System.out.println("Task before saving: " + task);
 
             if (task.getDescription() == null || task.getDescription().isEmpty()) {
                 throw new IllegalArgumentException("Description obligatoire.");
