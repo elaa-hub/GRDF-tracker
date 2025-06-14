@@ -1,14 +1,34 @@
 version: '3.8'
+
 services:
   mysql:
     image: mysql:latest
+    container_name: mysql-container
     environment:
-      MYSQL_ROOT_PASSWORD:
+      MYSQL_ROOT_PASSWORD: ton_mot_de_passe_mysql
       MYSQL_DATABASE: GRDF
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
+  backend:
+    build: .
+    container_name: grdf-backend
+    depends_on:
+      - mysql
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/GRDF?createDatabaseIfNotExist=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
+    networks:
+      - grdf-network
+
 volumes:
   mysql_data:
+
+networks:
+  grdf-network:
+    driver: bridge
