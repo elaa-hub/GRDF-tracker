@@ -27,7 +27,6 @@ private TaskRepository taskRepository;
     public List<Client> getClientsForTech(Long techId) {
         Tech tech = techRepository.findById(techId).orElseThrow(() -> new IllegalArgumentException("Technician not found"));
 
-        // Get notifications where task_needed is true
         List<Notification> notifications = notificationRepository.findByTaskNeededTrueAndTechnician(tech);
 
         return notifications.stream()
