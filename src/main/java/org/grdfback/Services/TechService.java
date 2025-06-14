@@ -78,7 +78,6 @@ public class TechService {
                 throw new IllegalArgumentException("Description obligatoire.");
             }
 
-            // Set the properties of the task
             task.setTech(tech);
             task.setClient(client);
             task.setTaskDate(LocalDate.now());
