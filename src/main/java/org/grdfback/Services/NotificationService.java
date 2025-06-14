@@ -30,7 +30,7 @@ private TaskRepository taskRepository;
         List<Notification> notifications = notificationRepository.findByTaskNeededTrueAndTechnician(tech);
 
         return notifications.stream()
-                .map(notification -> notification.getClient()) // Get the client from the notification
+                .map(notification -> notification.getClient())
                 .distinct() // Ensure no duplicate clients are returned
                 .collect(Collectors.toList());
     }
