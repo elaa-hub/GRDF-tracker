@@ -13,7 +13,7 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    private static final String SECRET = "superSecretKeyToChangeThatIs32Char!!";
+    private static final String SECRET = "9ef31DjeC@7a!Ezq8BxtOpLhVr6KmWuZ";
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
