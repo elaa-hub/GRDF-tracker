@@ -28,7 +28,7 @@ export class ReportIssueComponent implements OnInit {
     document.body.classList.remove('no-sidebar');
   }
   submitDefaillance() {
-    const clientId = 1; // à rendre dynamique plus tard
+    const clientId = 1;
 
     const body = {
       clientId: clientId,

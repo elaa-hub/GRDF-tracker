@@ -1,4 +1,4 @@
 ﻿export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:8081/api'
+  production: true,
+  baseUrl: 'https://grdf-tracker-ella.duckdns.org/api'
 };
