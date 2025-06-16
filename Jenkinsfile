@@ -28,6 +28,19 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            when {
+                changeset "**/${BACKEND_DIR}/**"
+            }
+            steps {
+                dir("${BACKEND_DIR}") {
+                    withSonarQubeEnv('sonar') {
+                        sh './mvnw sonar:sonar'
+                    }
+                }
+            }
+        }
+
         stage('Build Frontend') {
             when {
                 changeset "**/${FRONTEND_DIR}/**"
@@ -36,6 +49,23 @@ pipeline {
                 dir("${FRONTEND_DIR}") {
                     sh 'npm install'
                     sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Run Selenium Frontend Tests') {
+            when {
+                changeset "**/${FRONTEND_DIR}/**"
+            }
+            steps {
+                dir("${FRONTEND_DIR}") {
+                    sh '''
+                        npm install
+                        npm run build-themes || true
+                        npm start &
+                        sleep 20
+                        node selenium-tests/front-test.js
+                    '''
                 }
             }
         }
