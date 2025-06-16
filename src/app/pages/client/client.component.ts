@@ -14,7 +14,7 @@ export class ClientComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.client = this.authService.getUserInfo(); // À adapter selon ton service
+    this.client = this.authService.getUserInfo();
   }
 
   logout() {
