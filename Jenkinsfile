@@ -4,6 +4,8 @@ pipeline {
     environment {
         BACKEND_DIR = 'backend'
         FRONTEND_DIR = 'frontend'
+        DOCKER_IMAGE = 'grdf-back'
+        DOCKER_TAG = "${BUILD_NUMBER}"
     }
 
     triggers {
@@ -18,33 +20,24 @@ pipeline {
         }
 
         stage('Build Backend') {
-            when {
-                changeset "**/${BACKEND_DIR}/**"
-            }
             steps {
                 dir("${BACKEND_DIR}") {
-                    sh './mvnw clean package -DskipTests'
+                    sh './mvnw clean install'
                 }
             }
         }
 
         stage('SonarQube Analysis') {
-            when {
-                changeset "**/${BACKEND_DIR}/**"
-            }
             steps {
-                dir("${BACKEND_DIR}") {
-                    withSonarQubeEnv('sonar') {
-                        sh './mvnw sonar:sonar'
+                script {
+                    withSonarQubeEnv('sonarqube') {
+                        sh 'mvn sonar:sonar'
                     }
                 }
             }
         }
 
         stage('Build Frontend') {
-            when {
-                changeset "**/${FRONTEND_DIR}/**"
-            }
             steps {
                 dir("${FRONTEND_DIR}") {
                     sh 'npm install'
@@ -54,9 +47,6 @@ pipeline {
         }
 
         stage('Run Selenium Frontend Tests') {
-            when {
-                changeset "**/${FRONTEND_DIR}/**"
-            }
             steps {
                 dir("${FRONTEND_DIR}") {
                     sh '''
