@@ -2,14 +2,8 @@ pipeline {
     agent any
 
     environment {
-        BACKEND_DIR = 'backend'
-        FRONTEND_DIR = 'frontend'
-        DOCKER_IMAGE = 'grdf-back'
-        DOCKER_TAG = "${BUILD_NUMBER}"
-    }
-
-    triggers {
-        githubPush()
+        MAVEN_HOME = '/usr/share/maven'
+        PATH = "${env.MAVEN_HOME}/bin:${env.PATH}"
     }
 
     stages {
@@ -20,17 +14,23 @@ pipeline {
         }
 
         stage('Build Backend') {
+            when {
+                changeset "**/backend/**"
+            }
             steps {
-                dir("${BACKEND_DIR}") {
-                    sh './mvnw clean install'
+                dir('backend') {
+                    sh 'mvn clean install'
                 }
             }
         }
 
         stage('SonarQube Analysis') {
+            when {
+                changeset "**/backend/**"
+            }
             steps {
-                script {
-                    withSonarQubeEnv('sonarqube') {
+                withSonarQubeEnv('SonarQube') {
+                    dir('backend') {
                         sh 'mvn sonar:sonar'
                     }
                 }
@@ -38,8 +38,11 @@ pipeline {
         }
 
         stage('Build Frontend') {
+            when {
+                changeset "**/frontend/**"
+            }
             steps {
-                dir("${FRONTEND_DIR}") {
+                dir('frontend') {
                     sh 'npm install'
                     sh 'npm run build'
                 }
@@ -47,15 +50,12 @@ pipeline {
         }
 
         stage('Run Selenium Frontend Tests') {
+            when {
+                changeset "**/frontend/**"
+            }
             steps {
-                dir("${FRONTEND_DIR}") {
-                    sh '''
-                        npm install
-                        npm run build-themes || true
-                        npm start &
-                        sleep 20
-                        node selenium-tests/front-test.js
-                    '''
+                dir('frontend') {
+                    sh 'npm run test'
                 }
             }
         }
