@@ -18,9 +18,8 @@ public class TechController {
             Task createdTask = techService.addTaskForClient(techId, clientId, task);
             return ResponseEntity.ok(createdTask);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Impossible d'ajouter la tâche : " + e.getMessage());
+            return ResponseEntity.badRequest().body("Impossible d'ajouter la tâche:" + e.getMessage());
         }
     }
-
 }
 
