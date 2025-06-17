@@ -77,7 +77,6 @@ export class AuthService {
     }
   }
 
-  //  récupérer le rôle depuis le JWT
   getUserRole(): string {
     const token = localStorage.getItem('token');
     if (!token) return '';
