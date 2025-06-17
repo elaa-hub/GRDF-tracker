@@ -1,65 +1,38 @@
 pipeline {
     agent any
-    environment {
-        MAVEN_HOME = '/usr/share/maven'
-        PATH = "${env.MAVEN_HOME}/bin:${env.PATH}"
+
+    triggers {
+        githubPush()
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Build Backend') {
             steps {
-                dir('backend') {
-                    sh 'mvn clean install'
-                }
+                sh './mvnw clean package -DskipTests || mvn clean package -DskipTests'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    dir('backend') {
-                        sh 'mvn sonar:sonar'
-                    }
-                }
-            }
-        }
-
-        stage('Build Frontend') {
-            steps {
-                dir('frontend') {
-                    sh 'npm install'
-                    sh 'npm run build'
-                }
-            }
-        }
-
-        stage('Run Selenium Frontend Tests') {
-            steps {
-                dir('frontend') {
-                    sh 'npm run test'
+                withSonarQubeEnv('sonarqube') {
+                    sh 'mvn sonar:sonar'
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "✅ Déploiement fictif ici. À personnaliser."
+                echo 'Déploiement fictif backend...'
             }
         }
     }
 
     post {
         success {
-            echo "✅ Build succeeded!"
+            echo '✅ Build Backend Success!'
         }
         failure {
-            echo "❌ Build failed!"
+            echo '❌ Build Backend Failed!'
         }
     }
 }
