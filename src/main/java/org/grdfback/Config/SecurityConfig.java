@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 "/api/clients/notifications",
                                 "/api/clients/client",
                                 "/api/clients/client/address",
-                                "/api/hello", // 👈 ajoute cette ligne pour permettre l'accès sans authentification
+                                "/api/hello",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
 
