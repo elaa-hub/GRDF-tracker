@@ -18,9 +18,6 @@ pipeline {
         }
 
         stage('Build Backend') {
-            when {
-                changeset "**/${BACKEND_DIR}/**"
-            }
             steps {
                 dir("${BACKEND_DIR}") {
                     sh './mvnw clean package -DskipTests'
@@ -29,9 +26,6 @@ pipeline {
         }
 
         stage('Build Frontend') {
-            when {
-                changeset "**/${FRONTEND_DIR}/**"
-            }
             steps {
                 dir("${FRONTEND_DIR}") {
                     sh 'npm install'
