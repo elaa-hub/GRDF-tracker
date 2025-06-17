@@ -39,6 +39,7 @@ pipeline {
                 echo "✅ Déploiement fictif ici. À personnaliser."
             }
         }
+      
     }
 
     post {
