@@ -14,9 +14,6 @@ pipeline {
         }
 
         stage('Build Backend') {
-            when {
-                changeset "**/backend/**"
-            }
             steps {
                 dir('backend') {
                     sh 'mvn clean install'
@@ -25,9 +22,6 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            when {
-                changeset "**/backend/**"
-            }
             steps {
                 withSonarQubeEnv('SonarQube') {
                     dir('backend') {
@@ -38,9 +32,6 @@ pipeline {
         }
 
         stage('Build Frontend') {
-            when {
-                changeset "**/frontend/**"
-            }
             steps {
                 dir('frontend') {
                     sh 'npm install'
@@ -50,9 +41,6 @@ pipeline {
         }
 
         stage('Run Selenium Frontend Tests') {
-            when {
-                changeset "**/frontend/**"
-            }
             steps {
                 dir('frontend') {
                     sh 'npm run test'
