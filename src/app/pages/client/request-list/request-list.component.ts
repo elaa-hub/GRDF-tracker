@@ -10,12 +10,12 @@ export class RequestListComponent implements OnInit {
   emailClient: string = '';
   tasks: any[] = [];
   adresseMaison: string = '';
-  taskNeeded: boolean = false; // ou true si tu veux précocher "urgente"
+  taskNeeded: boolean = false;
   clientId: number = 1;
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    const email = localStorage.getItem('email'); // ✅ stocke l’email lors du login
+    const email = localStorage.getItem('email');
     this.http.get(`http://localhost:8081/api/clients/client/address?email=${email}`, { responseType: 'text' })
       .subscribe({
         next: (data) => {
