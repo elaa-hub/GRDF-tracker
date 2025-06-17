@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     environment {
         MAVEN_HOME = '/usr/share/maven'
         PATH = "${env.MAVEN_HOME}/bin:${env.PATH}"
