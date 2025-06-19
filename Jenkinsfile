@@ -11,6 +11,10 @@ pipeline {
         FRONTEND_BRANCH = 'frontend'
     }
 
+    triggers {
+        githubPush()
+    }
+
     stages {
         stage('📦 Checkout Backend') {
             steps {
