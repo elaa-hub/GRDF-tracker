@@ -85,7 +85,7 @@ pipeline {
 
     post {
         success {
-            echo '✅ Pipeline exécutée avec succès!'
+            echo '  ✅ Pipeline exécutée avec succès!'
         }
         failure {
             echo '❌ Échec de la pipeline.'
