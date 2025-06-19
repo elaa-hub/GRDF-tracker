@@ -76,7 +76,7 @@ pipeline {
 
         stage('📁 Archive Rapport HTML') {
             steps {
-                dir('frontend') {
+                dir('frontend') { 
                     archiveArtifacts artifacts: 'mochawesome-report/*.html', fingerprint: true
                 }
             }
