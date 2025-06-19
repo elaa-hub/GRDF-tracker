@@ -60,7 +60,7 @@ pipeline {
             }
         }
 
-        stage('📤 Envoi Rapport par Mail') {
+        stage('📤 Envoi Rapport par Mail  ') {
             steps {
                 dir('frontend') {
                     sh 'node selenium-tests/send-report.js'
