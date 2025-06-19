@@ -18,7 +18,7 @@ pipeline {
     }
 
     stages {
-        stage('📦 Checkout') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
@@ -58,7 +58,7 @@ pipeline {
             }
         }
 
-        stage('📁 Archive HTML Report') {
+        stage('📁 Archive Rapport HTML') {
             steps {
                 dir("${FRONTEND_DIR}") {
                     archiveArtifacts artifacts: 'mochawesome-report/*.html', fingerprint: true
@@ -66,13 +66,12 @@ pipeline {
             }
         }
     }
-
     post {
         success {
-            echo "✅ Build succeeded!"
+            echo "✅ Pipeline exécutée avec succès !"
         }
         failure {
-            echo "❌ Build failed!"
+            echo "❌ Échec de la pipeline"
         }
     }
 }
