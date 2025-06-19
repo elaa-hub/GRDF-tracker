@@ -9,8 +9,8 @@ pipeline {
     }
 
     tools {
-        maven 'Maven 3.9.6'
-        nodejs 'NodeJS 20'
+        maven 'mvn'               
+        nodejs 'NodeJS 20'       
     }
 
     triggers {
@@ -66,6 +66,7 @@ pipeline {
             }
         }
     }
+
     post {
         success {
             echo "✅ Pipeline exécutée avec succès !"
