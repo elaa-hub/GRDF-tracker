@@ -11,7 +11,6 @@ pipeline {
         FRONTEND_BRANCH = 'frontend'
         FRONTEND_DIR = 'frontend'
     }
-
     stages {
         stage('📦 Checkout Backend') {
             steps {
@@ -23,7 +22,6 @@ pipeline {
                 }
             }
         }
-
         stage('🌐 Checkout Frontend') {
             steps {
                 dir("${env.FRONTEND_DIR}") {
@@ -74,7 +72,6 @@ pipeline {
                 }
             }
         }
-
         stage('📁 Archive Rapport HTML') {
             steps {
                 dir("${env.FRONTEND_DIR}") {
@@ -83,7 +80,6 @@ pipeline {
             }
         }
     }
-
     post {
         success {
             echo '✅ Pipeline exécutée avec succès!'
