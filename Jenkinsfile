@@ -20,9 +20,10 @@ pipeline {
             steps {
                 dir('backend') {
                     checkout([$class: 'GitSCM',
-                        branches: [[name: "*/${env.BACKEND_BRANCH}"]],
+                        branches: [[name: '**']], // ✅ clone tout pour éviter le blocage
                         userRemoteConfigs: [[url: 'https://github.com/elaa-hub/GRDF-tracker.git']]
                     ])
+                    sh "git checkout ${env.BACKEND_BRANCH}" // ✅ forcer checkout local
                 }
             }
         }
@@ -31,9 +32,10 @@ pipeline {
             steps {
                 dir('frontend') {
                     checkout([$class: 'GitSCM',
-                        branches: [[name: "*/${env.FRONTEND_BRANCH}"]],
+                        branches: [[name: '**']],
                         userRemoteConfigs: [[url: 'https://github.com/elaa-hub/GRDF-tracker.git']]
                     ])
+                    sh "git checkout ${env.FRONTEND_BRANCH}"
                 }
             }
         }
