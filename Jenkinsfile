@@ -1,49 +1,59 @@
 pipeline {
     agent any
 
-    environment {
-        BACKEND_DIR = 'backend'
-        FRONTEND_DIR = 'frontend'
-        NODE_HOME = '/usr/local/bin'
-        PATH = "${env.NODE_HOME}:${env.PATH}"
-    }
-
     tools {
         maven 'mvn'
         nodejs 'NodeJS 20'
     }
 
-    triggers {
-        githubPush()
+    environment {
+        BACKEND_BRANCH = 'backend'
+        FRONTEND_BRANCH = 'frontend'
     }
 
     stages {
-        stage('Checkout') {
+        stage('📦 Checkout Backend') {
             steps {
-                checkout scm
+                dir('backend') {
+                    checkout([$class: 'GitSCM',
+                        branches: [[name: "*/${env.BACKEND_BRANCH}"]],
+                        userRemoteConfigs: [[url: 'https://github.com/elaa-hub/GRDF-tracker.git']]
+                    ])
+                }
+            }
+        }
+
+        stage('🌐 Checkout Frontend') {
+            steps {
+                dir('frontend') {
+                    checkout([$class: 'GitSCM',
+                        branches: [[name: "*/${env.FRONTEND_BRANCH}"]],
+                        userRemoteConfigs: [[url: 'https://github.com/elaa-hub/GRDF-tracker.git']]
+                    ])
+                }
             }
         }
 
         stage('🔧 Build Backend') {
             steps {
-                dir("${BACKEND_DIR}") {
+                dir('backend') {
                     sh 'mvn clean install -DskipTests'
                 }
             }
         }
 
-        stage('🌐 Build Frontend') {
+        stage('🌍 Build Frontend') {
             steps {
-                dir("${FRONTEND_DIR}") {
+                dir('frontend') {
                     sh 'npm install'
                     sh 'npm run build'
                 }
             }
         }
 
-        stage('🧪 Test Selenium') {
+        stage('🧪 Test Frontend') {
             steps {
-                dir("${FRONTEND_DIR}") {
+                dir('frontend') {
                     sh 'npm install'
                     sh 'npm run test:login'
                 }
@@ -52,7 +62,7 @@ pipeline {
 
         stage('📤 Envoi Rapport par Mail') {
             steps {
-                dir("${FRONTEND_DIR}") {
+                dir('frontend') {
                     sh 'node selenium-tests/send-report.js'
                 }
             }
@@ -60,7 +70,7 @@ pipeline {
 
         stage('📁 Archive Rapport HTML') {
             steps {
-                dir("${FRONTEND_DIR}") {
+                dir('frontend') {
                     archiveArtifacts artifacts: 'mochawesome-report/*.html', fingerprint: true
                 }
             }
@@ -69,10 +79,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Pipeline exécutée avec succès !"
+            echo '✅ Pipeline exécutée avec succès !'
         }
         failure {
-            echo "❌ Échec de la pipeline"
+            echo '❌ Échec de la pipeline.'
         }
     }
 }
