@@ -9,6 +9,7 @@ pipeline {
     environment {
         BACKEND_BRANCH = 'backend'
         FRONTEND_BRANCH = 'frontend'
+        NPM_CACHE = "${WORKSPACE}/.npm"
     }
 
     triggers {
@@ -49,8 +50,11 @@ pipeline {
         stage('🌐 Build Frontend') {
             steps {
                 dir('frontend') {
+                    // Active le cache NPM
+                    sh 'npm config set cache $NPM_CACHE --global'
+                    // Install + build rapide
                     sh 'npm install'
-                    sh 'npm run build'
+                    sh 'npm run build -- --configuration development'
                 }
             }
         }
