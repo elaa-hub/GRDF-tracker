@@ -1,16 +1,57 @@
-# DevExtreme Angular Template
+# 🚀 GRDF Tracker - Frontend Angular
 
-The DevExtreme Angular Template is an Angular application with a navigation menu and sample views in a responsive layout (see a [live preview](https://devexpress.github.io/devextreme-angular-template)). This application is created with [Angular CLI](https://github.com/angular/angular-cli) and uses [DevExtreme Angular components](https://js.devexpress.com/Documentation/Guide/Angular_Components/DevExtreme_Angular_Components/).
+Application Angular développée dans le cadre du projet GRDF Tracker.
+
+Ce projet utilise le **template DevExtreme Angular**, enrichi par des fonctionnalités spécifiques à la gestion des interventions pour GRDF.
 
 ![DevExtreme-Angular-Template](angular-template.png)
 
-## Getting Started
+---
 
-For more information about the DevExtreme Angular Template and how to customize it, refer to the following help topic: [Application Template](https://js.devexpress.com/Documentation/Guide/Angular_Components/Application_Template/).
+## 📦 Fonctionnalités principales
 
-## License
+- Interface responsive avec DevExtreme
+- Navigation latérale dynamique
+- Formulaires interactifs pour :
+  - Signaler une défaillance
+  - Consulter les tâches
+  - Noter un technicien
+- Dashboard statistiques personnalisé
+- Intégration CI/CD via Jenkins
+- Tests automatisés avec Selenium
+- Génération de rapports HTML avec Mochawesome
 
-**DevExtreme Angular Template is released as a MIT-licensed (free and open-source) add-on to DevExtreme.**
+---
 
-- [DevExtreme License](https://js.devexpress.com/Licensing/)
-- [Free trial](http://js.devexpress.com/Buy/)
+## 🧪 Tests et CI/CD
+
+Le projet est intégré à Jenkins via un `Jenkinsfile` :
+
+- Build frontend (`npm install` + `ng build`)
+- Tests Selenium exécutés automatiquement
+- Rapport HTML généré et archivé comme artefact
+- Pipeline déclenchée automatiquement via GitHub Webhook
+
+---
+
+## 🛠️ Technologies
+
+- Angular 17
+- TypeScript
+- DevExtreme
+- PrimeNG
+- Selenium
+- Jenkins
+- Mochawesome
+
+---
+
+## 📂 Structure
+
+```bash
+PFE GRDF-tracker/
+│
+├── GRDF/             # Frontend Angular
+├── GRDFBack/         # Backend Spring Boot
+├── Jenkinsfile       # Pipeline CI/CD
+└── selenium-tests/   # Tests automatisés
