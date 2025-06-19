@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        BACKEND_DIR = 'GRDFBack'
-        FRONTEND_DIR = 'GRDF'
+    BACKEND_DIR = '.'   
+    FRONTEND_DIR = 'GRDF'
         NODE_HOME = '/usr/local/bin'
         PATH = "${env.NODE_HOME}:${env.PATH}"
     }
