@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     environment {
-  BACKEND_DIR = 'GRDFBack'
+        BACKEND_DIR = 'backend'     // ✅ Corrigé
         FRONTEND_DIR = 'GRDF'
         NODE_HOME = '/usr/local/bin'
         PATH = "${env.NODE_HOME}:${env.PATH}"
     }
 
     tools {
-        maven 'mvn'               
-        nodejs 'NodeJS 20'       
+        maven 'mvn'                // ✅ Nom correct configuré dans Jenkins
+        nodejs 'NodeJS 20'        // ✅ Nom que tu as donné à ton Node.js
     }
 
     triggers {
