@@ -28,17 +28,15 @@ pipeline {
             }
         }
 
-        stage('🌐 Checkout Frontend') {
-            steps {
-                dir('frontend') {
-                    checkout([$class: 'GitSCM',
-                        branches: [[name: '**']],
-                        userRemoteConfigs: [[url: 'https://github.com/elaa-hub/GRDF-tracker.git']]
-                    ])
-                    sh "git checkout ${env.FRONTEND_BRANCH}"
-                }
-            }
+stage('🌐 Build Frontend') {
+    steps {
+        dir('frontend') {
+            sh 'rm -rf node_modules package-lock.json'
+            sh 'npm install'
+            sh 'npm run build'
         }
+    }
+}
 
         stage('🔧 Build Backend') {
             steps {
