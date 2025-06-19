@@ -9,6 +9,7 @@ pipeline {
     environment {
         BACKEND_BRANCH = 'backend'
         FRONTEND_BRANCH = 'frontend'
+        FRONTEND_DIR = 'frontend'
     }
 
     stages {
@@ -25,7 +26,7 @@ pipeline {
 
         stage('🌐 Checkout Frontend') {
             steps {
-                dir('frontend') {
+                dir("${env.FRONTEND_DIR}") {
                     checkout([$class: 'GitSCM',
                         branches: [[name: "*/${env.FRONTEND_BRANCH}"]],
                         userRemoteConfigs: [[url: 'https://github.com/elaa-hub/GRDF-tracker.git']]
@@ -42,27 +43,33 @@ pipeline {
             }
         }
 
-        stage('🌍 Build Frontend') {
+        stage('🌐 Build Frontend') {
             steps {
-                dir('frontend') {
-                    sh 'npm install'
-                    sh 'npm run build'
+                dir("${env.FRONTEND_DIR}") {
+                    sh '''
+                    if [ ! -d "node_modules" ]; then
+                      echo "Installing dependencies..."
+                      npm install
+                    else
+                      echo "Using existing node_modules"
+                    fi
+                    npm run build
+                    '''
                 }
             }
         }
 
         stage('🧪 Test Frontend') {
             steps {
-                dir('frontend') {
-                    sh 'npm install'
+                dir("${env.FRONTEND_DIR}") {
                     sh 'npm run test:login'
                 }
             }
         }
 
-        stage('📤 Envoi Rapport par Mail  ') {
+        stage('📤 Envoi Rapport par Mail') {
             steps {
-                dir('frontend') {
+                dir("${env.FRONTEND_DIR}") {
                     sh 'node selenium-tests/send-report.js'
                 }
             }
@@ -70,7 +77,7 @@ pipeline {
 
         stage('📁 Archive Rapport HTML') {
             steps {
-                dir('frontend') {
+                dir("${env.FRONTEND_DIR}") {
                     archiveArtifacts artifacts: 'mochawesome-report/*.html', fingerprint: true
                 }
             }
