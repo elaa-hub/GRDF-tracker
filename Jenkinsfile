@@ -1,16 +1,16 @@
 pipeline {
     agent any
 
-environment {
-    BACKEND_DIR = '.' 
-    FRONTEND_DIR = 'GRDF' 
-    NODE_HOME = '/usr/local/bin'
-    PATH = "${env.NODE_HOME}:${env.PATH}"
-}
+    environment {
+        BACKEND_DIR = 'backend'
+        FRONTEND_DIR = 'frontend'
+        NODE_HOME = '/usr/local/bin'
+        PATH = "${env.NODE_HOME}:${env.PATH}"
+    }
 
     tools {
-        maven 'mvn'                // ✅ Nom correct configuré dans Jenkins
-        nodejs 'NodeJS 20'        // ✅ Nom que tu as donné à ton Node.js
+        maven 'mvn'
+        nodejs 'NodeJS 20'
     }
 
     triggers {
@@ -27,7 +27,7 @@ environment {
         stage('🔧 Build Backend') {
             steps {
                 dir("${BACKEND_DIR}") {
-            sh 'mvn clean install -DskipTests'
+                    sh 'mvn clean install -DskipTests'
                 }
             }
         }
