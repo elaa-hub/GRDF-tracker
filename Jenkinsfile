@@ -20,10 +20,10 @@ pipeline {
             steps {
                 dir('backend') {
                     checkout([$class: 'GitSCM',
-                        branches: [[name: '**']], // ✅ clone tout pour éviter le blocage
+                        branches: [[name: '**']], 
                         userRemoteConfigs: [[url: 'https://github.com/elaa-hub/GRDF-tracker.git']]
                     ])
-                    sh "git checkout ${env.BACKEND_BRANCH}" // ✅ forcer checkout local
+                    sh "git checkout ${env.BACKEND_BRANCH}" 
                 }
             }
         }
