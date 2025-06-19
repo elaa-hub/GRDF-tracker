@@ -29,7 +29,7 @@ const chrome = require('selenium-webdriver/chrome');
 
     console.log('✅ Frontend test passed!');
   } catch (error) {
-    console.error('❌ Test failed!', error);
+    console.error('❌ Test failed !', error);
     process.exit(1);
   } finally {
     await driver.quit();
