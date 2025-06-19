@@ -28,15 +28,17 @@ pipeline {
             }
         }
 
-stage('🌐 Build Frontend') {
-    steps {
-        dir('frontend') {
-            sh 'rm -rf node_modules package-lock.json'
-            sh 'npm install'
-            sh 'npm run build'
+        stage('🌐 Checkout Frontend') {
+            steps {
+                dir('frontend') {
+                    checkout([$class: 'GitSCM',
+                        branches: [[name: '**']], 
+                        userRemoteConfigs: [[url: 'https://github.com/elaa-hub/GRDF-tracker.git']]
+                    ])
+                    sh "git checkout ${env.FRONTEND_BRANCH}" 
+                }
+            }
         }
-    }
-}
 
         stage('🔧 Build Backend') {
             steps {
@@ -49,6 +51,7 @@ stage('🌐 Build Frontend') {
         stage('🌐 Build Frontend') {
             steps {
                 dir('frontend') {
+                    sh 'rm -rf node_modules package-lock.json'
                     sh 'npm install'
                     sh 'npm run build'
                 }
@@ -74,7 +77,7 @@ stage('🌐 Build Frontend') {
 
         stage('📁 Archive Rapport HTML') {
             steps {
-                dir('frontend') { 
+                dir('frontend') {
                     archiveArtifacts artifacts: 'mochawesome-report/*.html', fingerprint: true
                 }
             }
@@ -83,7 +86,7 @@ stage('🌐 Build Frontend') {
 
     post {
         success {
-            echo '  ✅ Pipeline exécutée avec succès!'
+            echo '✅ Pipeline exécutée avec succès!'
         }
         failure {
             echo '❌ Échec de la pipeline.'
