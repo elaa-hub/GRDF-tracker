@@ -27,7 +27,7 @@ environment {
         stage('🔧 Build Backend') {
             steps {
                 dir("${BACKEND_DIR}") {
-                    sh './mvnw clean install -DskipTests || mvn clean install -DskipTests'
+            sh 'mvn clean install -DskipTests'
                 }
             }
         }
