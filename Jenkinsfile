@@ -9,8 +9,8 @@ pipeline {
     environment {
         BACKEND_BRANCH = 'backend'
         FRONTEND_BRANCH = 'frontend'
-        FRONTEND_DIR = 'frontend'
     }
+
     stages {
         stage('📦 Checkout Backend') {
             steps {
@@ -22,9 +22,10 @@ pipeline {
                 }
             }
         }
+
         stage('🌐 Checkout Frontend') {
             steps {
-                dir("${env.FRONTEND_DIR}") {
+                dir('frontend') {
                     checkout([$class: 'GitSCM',
                         branches: [[name: "*/${env.FRONTEND_BRANCH}"]],
                         userRemoteConfigs: [[url: 'https://github.com/elaa-hub/GRDF-tracker.git']]
@@ -43,23 +44,17 @@ pipeline {
 
         stage('🌐 Build Frontend') {
             steps {
-                dir("${env.FRONTEND_DIR}") {
-                    sh '''
-                    if [ ! -d "node_modules" ]; then
-                      echo "Installing dependencies..."
-                      npm install
-                    else
-                      echo "Using existing node_modules"
-                    fi
-                    npm run build
-                    '''
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
                 }
             }
         }
 
         stage('🧪 Test Frontend') {
             steps {
-                dir("${env.FRONTEND_DIR}") {
+                dir('frontend') {
+                    sh 'npm install'
                     sh 'npm run test:login'
                 }
             }
@@ -67,19 +62,21 @@ pipeline {
 
         stage('📤 Envoi Rapport par Mail') {
             steps {
-                dir("${env.FRONTEND_DIR}") {
+                dir('frontend') {
                     sh 'node selenium-tests/send-report.js'
                 }
             }
         }
+
         stage('📁 Archive Rapport HTML') {
             steps {
-                dir("${env.FRONTEND_DIR}") {
+                dir('frontend') {
                     archiveArtifacts artifacts: 'mochawesome-report/*.html', fingerprint: true
                 }
             }
         }
     }
+
     post {
         success {
             echo '✅ Pipeline exécutée avec succès!'
