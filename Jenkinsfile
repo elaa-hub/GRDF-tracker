@@ -62,13 +62,12 @@ pipeline {
             }
         }
 
- stage('🐳 Docker Build Frontend (avec dist)') {
+stage('🐳 Docker Build Frontend (avec dist)') {
     steps {
         dir('frontend') {
             script {
-                // 💡 Le build Angular génère déjà dist/DevExtreme-app
-                // Dockerfile doit donc utiliser ce chemin directement
-                def app = docker.build('grdf-frontend:latest', '--build-arg APP_DIR=dist/DevExtreme-app .')
+                sh 'rm -rf DockerDist && cp -r dist/DevExtreme-app DockerDist'
+                def app = docker.build('grdf-frontend:latest', '--build-arg APP_DIR=DockerDist .')
             }
         }
     }
