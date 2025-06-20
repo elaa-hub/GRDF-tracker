@@ -69,9 +69,10 @@ stage('🐳 Docker Build Frontend (avec dist)') {
                 sh '''
                     echo "[INFO] Listing dist directory contents:"
                     ls -l dist
-                    echo "[INFO] Copying DevExtreme-app directory to DockerDist"
+                    echo "[INFO] Copie vers DockerDist"
                     rm -rf DockerDist
-                    cp -r dist/DevExtreme-app DockerDist
+                    mkdir DockerDist
+                    cp -r dist/* DockerDist/
                 '''
                 def app = docker.build('grdf-frontend:latest', '--build-arg APP_DIR=DockerDist .')
             }
