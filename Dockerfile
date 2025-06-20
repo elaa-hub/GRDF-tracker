@@ -16,5 +16,4 @@ COPY . .
 # Build optimisé
 RUN npm run build -- --configuration development --no-progress
 
-# Répertoire final du build
 CMD ["ls", "-la", "dist"]
