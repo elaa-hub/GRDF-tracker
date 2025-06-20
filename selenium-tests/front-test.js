@@ -33,6 +33,6 @@ const chrome = require('selenium-webdriver/chrome');
     process.exit(1);
   } finally {
     await driver.quit();
-    console.log('🚪Browser closed!!.');
+    console.log('🚪Browser closed!.');
   }
 })();
