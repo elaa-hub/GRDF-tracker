@@ -52,7 +52,7 @@ pipeline {
             steps {
                 dir('frontend') {
                     script {
-                        docker.build('grdf-frontend:latest')
+                        def app = docker.build('grdf-frontend:latest')
                     }
                 }
             }
