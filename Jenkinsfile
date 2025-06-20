@@ -48,40 +48,22 @@ pipeline {
             }
         }
 
-        stage('🌐  Build Frontend (optimisé)') {
+        stage('🐳 Docker Build Frontend') {
             steps {
                 dir('frontend') {
-                    sh '''
-                        echo "📦 Initialisation des caches"
-                        mkdir -p $NPM_CACHE
-                        mkdir -p $NPM_MODULES_CACHE
-
-                        echo "🔁 Restauration de node_modules depuis le cache (si présent)"
-                        if [ -d "$NPM_MODULES_CACHE/node_modules" ]; then
-                            cp -R $NPM_MODULES_CACHE/node_modules ./ || true
-                        fi
-
-                        echo "⚙️ Configuration du cache NPM"
-                        npm config set cache $NPM_CACHE --global
-
-                        echo "📥 Installation rapide des dépendances"
-                        npm ci || npm install
-
-                        echo "💾 Sauvegarde node_modules vers cache"
-                        rm -rf $NPM_MODULES_CACHE/node_modules
-                        cp -R node_modules $NPM_MODULES_CACHE/ || true
-
-                        echo "🚀 Build Angular optimisé"
-                        time NODE_OPTIONS=--max_old_space_size=2048 npm run build -- --configuration development --no-progress
-                    '''
+                    script {
+                        docker.build('grdf-frontend:latest')
+                    }
                 }
             }
         }
 
-        stage('🧪 Test Frontend') {
+        stage('🧪 Test Frontend (in Docker)') {
             steps {
-                dir('frontend') {
-                    sh 'npm run test:login'
+                script {
+                    docker.image('grdf-frontend:latest').inside {
+                        sh 'npm run test:login'
+                    }
                 }
             }
         }
