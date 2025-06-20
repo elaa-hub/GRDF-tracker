@@ -66,12 +66,19 @@ stage('🐳 Docker Build Frontend (avec dist)') {
     steps {
         dir('frontend') {
             script {
-                sh 'rm -rf DockerDist && cp -r dist/DevExtreme-app DockerDist'
+                sh '''
+                    echo "[INFO] Listing dist directory contents:"
+                    ls -l dist
+                    echo "[INFO] Copying DevExtreme-app directory to DockerDist"
+                    rm -rf DockerDist
+                    cp -r dist/DevExtreme-app DockerDist
+                '''
                 def app = docker.build('grdf-frontend:latest', '--build-arg APP_DIR=DockerDist .')
             }
         }
     }
 }
+
 
 
         stage('🧪 Test Frontend (in Docker)') {
