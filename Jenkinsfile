@@ -48,7 +48,7 @@ pipeline {
             }
         }
 
-        stage('🌐 Build Frontend (optimisé)') {
+        stage('🌐  Build Frontend (optimisé)') {
             steps {
                 dir('frontend') {
                     sh '''
