@@ -66,6 +66,8 @@ pipeline {
             steps {
                 dir('frontend') {
                     script {
+                        // ✅ S'assurer que le dossier dist/DevExtreme-app est à l'intérieur du contexte Docker
+                        sh 'cp -r dist/DevExtreme-app ./dist || echo "déjà présent"'
                         def app = docker.build('grdf-frontend:latest')
                     }
                 }
