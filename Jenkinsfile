@@ -10,6 +10,7 @@ pipeline {
         BACKEND_BRANCH = 'backend'
         FRONTEND_BRANCH = 'frontend'
         NPM_CACHE = "${WORKSPACE}/.npm"
+        NPM_MODULES_CACHE = "/mnt/jenkins_data/cache_node_modules"
     }
 
     triggers {
@@ -50,9 +51,21 @@ pipeline {
         stage('🌐 Build Frontend (Optimisé)') {
             steps {
                 dir('frontend') {
-                    sh 'npm config set cache $NPM_CACHE --global'
-                    sh 'npm install'
-                    sh 'time NODE_OPTIONS=--max_old_space_size=2048 npm run build -- --configuration development --no-progress'
+                    sh '''
+                        echo "📦 Préparation du cache NPM et node_modules"
+                        mkdir -p $NPM_CACHE
+                        mkdir -p $NPM_MODULES_CACHE
+                        ln -sfn $NPM_MODULES_CACHE node_modules
+
+                        echo "⚙️ Configuration du cache NPM"
+                        npm config set cache $NPM_CACHE --global
+
+                        echo "📥 Installation des dépendances (rapide)"
+                        npm ci || npm install
+
+                        echo "🚀 Compilation optimisée"
+                        time NODE_OPTIONS=--max_old_space_size=2048 npm run build -- --configuration development --no-progress
+                    '''
                 }
             }
         }
