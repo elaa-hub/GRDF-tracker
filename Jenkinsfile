@@ -47,14 +47,12 @@ pipeline {
             }
         }
 
-        stage('🌐 Build Frontend') {
+        stage('🌐 Build Frontend (Optimisé)') {
             steps {
                 dir('frontend') {
-                    // Active le cache NPM
                     sh 'npm config set cache $NPM_CACHE --global'
-                    // Install + build rapide
                     sh 'npm install'
-                    sh 'npm run build -- --configuration development'
+                    sh 'time NODE_OPTIONS=--max_old_space_size=2048 npm run build -- --configuration development --no-progress'
                 }
             }
         }
