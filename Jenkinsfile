@@ -11,6 +11,7 @@ pipeline {
         FRONTEND_BRANCH = 'frontend'
         NPM_CACHE = "${WORKSPACE}/.npm"
         NPM_MODULES_CACHE = "/mnt/jenkins_data/cache_node_modules"
+        NODE_OPTIONS = "--max-old-space-size=8192"
     }
 
     triggers {
@@ -18,6 +19,7 @@ pipeline {
     }
 
     stages {
+
         stage('📦 Checkout Backend') {
             steps {
                 dir('backend') {
@@ -48,7 +50,19 @@ pipeline {
             }
         }
 
-        stage('🐳 Docker Build Frontend') {
+        stage('⚙️ Build Angular App (hors Docker)') {
+            steps {
+                dir('frontend') {
+                    sh '''
+                        npm ci --prefer-offline --no-audit
+                        rm -f ./node_modules/.ngcc_lock_file
+                        npm run build -- --configuration production --no-progress
+                    '''
+                }
+            }
+        }
+
+        stage('🐳 Docker Build Frontend (avec dist)') {
             steps {
                 dir('frontend') {
                     script {
