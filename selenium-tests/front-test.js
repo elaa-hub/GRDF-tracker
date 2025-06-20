@@ -23,7 +23,7 @@ const chrome = require('selenium-webdriver/chrome');
     const logoDisplayed = await logo.isDisplayed();
     console.log('Logo displayed:', logoDisplayed);
 
-    console.log('📝 Checking page title...');
+    console.log('📝 Checking page title ...');
     const title = await driver.getTitle();
     console.log('Page Title:', title);
 
