@@ -62,31 +62,36 @@ pipeline {
             }
         }
 
-stage('🐳 Docker Build Frontend (avec dist)') {
-    steps {
-        dir('frontend') {
-            script {
-                sh '''
-                    echo "[INFO] Listing dist directory contents:"
-                    ls -l dist
-                    echo "[INFO] Copie vers DockerDist"
-                    rm -rf DockerDist
-                    mkdir DockerDist
-                    cp -r dist/* DockerDist/
-                '''
-                def app = docker.build('grdf-frontend:latest', '--build-arg APP_DIR=DockerDist .')
+        stage('📦 Install Frontend Dependencies') {
+            steps {
+                dir('frontend') {
+                    sh 'npm install'
+                }
             }
         }
-    }
-}
 
-
-
-        stage('🧪 Test Frontend (in Docker)') {
+        stage('🧪 Test Frontend') {
             steps {
-                script {
-                    docker.image('grdf-frontend:latest').inside {
-                        sh 'npm run test:login'
+                dir('frontend') {
+                    sh 'npm run test:front'
+                    sh 'npm run test:login'
+                }
+            }
+        }
+
+        stage('🐳 Docker Build Frontend (avec dist)') {
+            steps {
+                dir('frontend') {
+                    script {
+                        sh '''
+                            echo "[INFO] Listing dist directory contents:"
+                            ls -l dist
+                            echo "[INFO] Copie vers DockerDist"
+                            rm -rf DockerDist
+                            mkdir DockerDist
+                            cp -r dist/* DockerDist/
+                        '''
+                        def app = docker.build('grdf-frontend:latest', '--build-arg APP_DIR=DockerDist .')
                     }
                 }
             }
