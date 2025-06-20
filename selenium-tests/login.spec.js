@@ -3,7 +3,7 @@ const chrome = require('selenium-webdriver/chrome');
 const { expect } = require('chai');
 const path = require('path');
 
-describe('🧪 GRDF Client: Signaler une défaillance', function () {
+describe('  🧪 GRDF Client: Signaler une défaillance', function () {
   this.timeout(60000);
 
   let driver;
