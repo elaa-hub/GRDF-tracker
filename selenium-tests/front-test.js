@@ -18,7 +18,7 @@ const chrome = require('selenium-webdriver/chrome');
     console.log('🌐 Opening your Angular app...');
     await driver.get('http://localhost:4200');
 
-    console.log('🔍 Checking if GRDF logo is visible...');
+    console.log('🔍  Checking if GRDF logo is visible...');
     const logo = await driver.findElement(By.css('img.logo'));
     const logoDisplayed = await logo.isDisplayed();
     console.log('Logo displayed:', logoDisplayed);
