@@ -48,22 +48,30 @@ pipeline {
             }
         }
 
-        stage('🌐 Build Frontend ') {
+        stage('🌐 Build Frontend (optimisé)') {
             steps {
                 dir('frontend') {
                     sh '''
-                        echo "📦 Préparation du cache NPM et node_modules"
+                        echo "📦 Initialisation des caches"
                         mkdir -p $NPM_CACHE
                         mkdir -p $NPM_MODULES_CACHE
-                        ln -sfn $NPM_MODULES_CACHE node_modules
+
+                        echo "🔁 Restauration de node_modules depuis le cache (si présent)"
+                        if [ -d "$NPM_MODULES_CACHE/node_modules" ]; then
+                            cp -R $NPM_MODULES_CACHE/node_modules ./ || true
+                        fi
 
                         echo "⚙️ Configuration du cache NPM"
                         npm config set cache $NPM_CACHE --global
 
-                        echo "📥 Installation des dépendances (rapide)"
+                        echo "📥 Installation rapide des dépendances"
                         npm ci || npm install
 
-                        echo "🚀 Compilation optimisée"
+                        echo "💾 Sauvegarde node_modules vers cache"
+                        rm -rf $NPM_MODULES_CACHE/node_modules
+                        cp -R node_modules $NPM_MODULES_CACHE/ || true
+
+                        echo "🚀 Build Angular optimisé"
                         time NODE_OPTIONS=--max_old_space_size=2048 npm run build -- --configuration development --no-progress
                     '''
                 }
