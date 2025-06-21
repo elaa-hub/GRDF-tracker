@@ -70,18 +70,30 @@ pipeline {
             }
         }
 
-        stage('🧪 Test Frontend') {
-            steps {
-                dir('frontend') {
-                    sh '''
-                        export PATH=$PATH:/usr/local/bin
-                        npm run test:login
-                    '''
-                }
-            }
-        }
-
-        stage('📁 Archive Rapport HTML') {
+stage('🧪 Test Frontend') {
+  steps {
+    dir('frontend') {
+      sh '''
+        npm install -g @angular/cli
+        nohup npm run start &> angular.log &
+        echo "[INFO] Attente du lancement de l'app Angular..."
+        n=0
+        until curl -s http://localhost:4200 > /dev/null; do
+          sleep 2
+          n=$((n+1))
+          if [ $n -ge 30 ]; then
+            echo "❌ Angular ne s'est pas lancé."
+            cat angular.log
+            exit 1
+          fi
+        done
+        echo "✅ Angular lancé, lancement des tests..."
+        npm run test:login
+      '''
+    }
+  }
+}
+       stage('📁 Archive Rapport HTML') {
             steps {
                 dir('frontend') {
                     archiveArtifacts artifacts: 'mochawesome-report/*.html', fingerprint: true
