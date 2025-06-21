@@ -1,34 +1,28 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const { expect } = require('chai');
-const path = require('path');
 
-describe('  🧪 GRDF Client: Signaler une défaillance', function () {
+describe('🧪 GRDF Client: Signaler une défaillance', function () {
   this.timeout(60000);
-
   let driver;
 
   before(async () => {
-    const chromedriverPath = require('chromedriver').path;
-    const service = new chrome.ServiceBuilder(chromedriverPath);
-
     const options = new chrome.Options();
-    options.setChromeBinaryPath('C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe');
+    options.addArguments('--headless');
+    options.addArguments('--disable-gpu');
     options.addArguments('--no-sandbox');
     options.addArguments('--disable-dev-shm-usage');
 
     driver = await new Builder()
       .forBrowser('chrome')
-      .setChromeService(service)
       .setChromeOptions(options)
       .build();
   });
+
   after(async () => {
-    if (driver) {
-      await driver.sleep(5000);
-      await driver.quit();
-    }
+    if (driver) await driver.quit();
   });
+
   it('should login and signal a defaillance correctly', async () => {
     await driver.get('http://localhost:4200');
     await driver.findElement(By.name('email')).sendKeys('newclient@mail.com');
@@ -37,7 +31,8 @@ describe('  🧪 GRDF Client: Signaler une défaillance', function () {
 
     await driver.wait(until.urlContains('/client'), 5000);
 
-    const defaillanceBtn = await driver.findElement(By.xpath("//button[contains(text(),'Signaler une défaillance')]"));
+    const defaillanceBtn = await driver.wait(
+      until.elementLocated(By.xpath("//button[contains(text(),'Signaler une défaillance')]")), 5000);
     await defaillanceBtn.click();
 
     await driver.wait(until.urlContains('/client/report-issue'), 5000);
@@ -51,9 +46,16 @@ describe('  🧪 GRDF Client: Signaler une défaillance', function () {
     await driver.findElement(By.xpath("//option[contains(text(),'Non urgente')]")).click();
 
     const descTextArea = await driver.findElement(By.id('description'));
-    await descTextArea.sendKeys('Problème de fuite de gaz détecté');
+    await driver.executeScript(`
+      const textarea = arguments[0];
+      textarea.value = 'Problème de fuite de gaz détecté';
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    `, descTextArea);
 
-    const submitBtn = await driver.findElement(By.css('button[type=\"submit\"]'));
+    const value = await driver.findElement(By.id('description')).getAttribute('value');
+    expect(value).to.equal('Problème de fuite de gaz détecté');
+
+    const submitBtn = await driver.findElement(By.css('button[type="submit"]'));
     await submitBtn.click();
 
     await driver.wait(until.urlContains('/client/demander-technicien'), 5000);
