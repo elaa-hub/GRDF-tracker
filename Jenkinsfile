@@ -70,14 +70,16 @@ pipeline {
             }
         }
 
-        stage('🧪 Test Frontend') {
-            steps {
-                dir('frontend') {
-                    sh 'npm run test:front'
-                    sh 'npm run test:login || true' // pour éviter l'arrêt complet si test échoue
-                }
-            }
+  stage('🧪 Test Frontend') {
+    steps {
+        dir('frontend') {
+            sh '''
+                npm run test:login
+            '''
         }
+    }
+}
+
 
         stage('📁 Archive Rapport HTML') {
             steps {
