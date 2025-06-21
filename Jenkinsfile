@@ -70,17 +70,16 @@ pipeline {
             }
         }
 
-stage('🧪 Test Frontend') {
-  steps {
-    dir('frontend') {
-      sh '''
-        export PATH=$PATH:/usr/local/bin
-        npm run test:login
-      '''
-    }
-  }
-}
-
+        stage('🧪 Test Frontend') {
+            steps {
+                dir('frontend') {
+                    sh '''
+                        export PATH=$PATH:/usr/local/bin
+                        npm run test:login
+                    '''
+                }
+            }
+        }
 
         stage('📁 Archive Rapport HTML') {
             steps {
@@ -108,13 +107,14 @@ stage('🧪 Test Frontend') {
             }
         }
 
-  stage('📤 Envoi Rapport par Mail') {
-  steps {
-    dir('frontend') {
-      sh 'node selenium-tests/send-report.js'
+        stage('📤 Envoi Rapport par Mail') {
+            steps {
+                dir('frontend') {
+                    sh 'node selenium-tests/send-report.js'
+                }
+            }
+        }
     }
-  }
-}
 
     post {
         success {
