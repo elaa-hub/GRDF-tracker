@@ -1,7 +1,9 @@
+
 const { Builder, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const { expect } = require('chai');
 const path = require('path');
+const fs = require('fs');
 
 describe('🧪 GRDF Client: Signaler une défaillance', function () {
   this.timeout(60000);
@@ -12,10 +14,19 @@ describe('🧪 GRDF Client: Signaler une défaillance', function () {
     const chromedriverPath = require('chromedriver').path;
     const service = new chrome.ServiceBuilder(chromedriverPath);
 
+    const chromePath = process.env.CHROME_BIN || '/usr/bin/google-chrome'; // 🟡 modifié : fallback
+    console.log('🔍 Chrome utilisé :', chromePath); // 🟢 ajouté
+    if (!fs.existsSync(chromePath)) { // 🟢 ajouté
+      throw new Error(`❌ Chrome introuvable à : ${chromePath}`); // 🟢 ajouté
+    }
+
     const options = new chrome.Options();
-    options.setChromeBinaryPath('C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe');
+    options.setChromeBinaryPath(chromePath);
     options.addArguments('--no-sandbox');
     options.addArguments('--disable-dev-shm-usage');
+    options.addArguments('--disable-gpu'); // 🟢 ajouté
+
+    options.addArguments('--headless=new');
 
     driver = await new Builder()
       .forBrowser('chrome')
