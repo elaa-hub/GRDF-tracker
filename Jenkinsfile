@@ -55,14 +55,12 @@ pipeline {
                 dir('backend') {
                     sh '''
                         echo "[INFO] Lancement du backend Spring Boot..."
-                                        chmod +x ./mvnw
-
+                        chmod +x ./mvnw
                         nohup ./mvnw spring-boot:run > backend.log 2>&1 &
 
-                             echo "[INFO] Attente du démarrage du backend (port 8081)..."
-                              n=0
-                             until curl -s http://localhost:8081/actuator/health | grep -q UP; do
-
+                        echo "[INFO] Attente du démarrage du backend (port 8081)..."
+                        n=0
+                        until curl -s http://localhost:8081/actuator/health | grep -q UP; do
                             sleep 2
                             n=$((n+1))
                             if [ $n -ge 30 ]; then
@@ -107,13 +105,24 @@ pipeline {
                         echo "[INFO] Installation CLI Angular globale..."
                         npm install -g @angular/cli
 
+                        echo "[INFO] Installation de Google Chrome Linux..."
+                        cat <<EOF | sudo tee /etc/yum.repos.d/google-chrome.repo
+[google-chrome]
+name=google-chrome
+baseurl=https://dl.google.com/linux/chrome/rpm/stable/x86_64
+enabled=1
+gpgcheck=1
+gpgkey=https://dl.google.com/linux/linux_signing_key.pub
+EOF
+
+                        sudo yum install -y google-chrome-stable
+
                         echo "[INFO] Démarrage de Xvfb..."
                         sudo yum install -y xorg-x11-server-Xvfb > /dev/null 2>&1 || true
                         Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
 
                         echo "[INFO] Lancement de l'app Angular..."
-                      nohup npx serve -s dist --listen 4200 > angular.log 2>&1 &
-
+                        nohup npx serve -s dist --listen 4200 > angular.log 2>&1 &
 
                         echo "[INFO] Attente de démarrage de l'app Angular..."
                         n=0
