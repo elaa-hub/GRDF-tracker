@@ -9,8 +9,7 @@ pipeline {
     environment {
         BACKEND_BRANCH = 'backend'
         FRONTEND_BRANCH = 'frontend'
-        NPM_CACHE = "${WORKSPACE}/.npm"
-        NPM_MODULES_CACHE = "/mnt/jenkins_data/cache_node_modules"
+        NODE_OPTIONS = "--max-old-space-size=8192"
     }
 
     triggers {
@@ -18,7 +17,6 @@ pipeline {
     }
 
     stages {
-
         stage('📦 Checkout Backend') {
             steps {
                 dir('backend') {
@@ -54,17 +52,17 @@ pipeline {
                 dir('backend') {
                     sh '''
                         echo '[INFO] Lancement du backend Spring Boot...'
-                        chmod +x ./mvnw
-                        nohup ./mvnw spring-boot:run &
+                        nohup ./mvnw spring-boot:run > backend.log 2>&1 &
                         echo '[INFO] Attente du démarrage du backend (port 8081)...'
                         n=0
                         until curl -s http://localhost:8081/actuator/health | grep -q UP; do
-                          sleep 2
-                          n=$((n+1))
-                          if [ $n -ge 30 ]; then
-                            echo '❌ Timeout backend non démarré'
-                            exit 1
-                          fi
+                            sleep 2
+                            n=$((n+1))
+                            if [ $n -ge 30 ]; then
+                                echo '❌ Timeout backend non démarré'
+                                cat backend.log
+                                exit 1
+                            fi
                         done
                         echo '✅ Backend démarré avec succès !'
                     '''
@@ -72,89 +70,107 @@ pipeline {
             }
         }
 
-        stage('⚙️ Build Angular App (hors Docker)') {
+        stage('⚙️ Build Angular App') {
             steps {
                 dir('frontend') {
                     sh '''
                         npm ci --prefer-offline --no-audit
-                        rm -f ./node_modules/.ngcc_lock_file
                         npm run build -- --configuration production --no-progress
+                        echo '[INFO] Vérification du contenu dist/'
+                        ls -l dist
                     '''
                 }
             }
         }
 
-        stage('📦 Install Frontend Dependencies') {
+        stage('📦 Install Chrome & Xvfb') {
+            steps {
+                sh '''
+                    echo '[INFO] Installation de Google Chrome et ChromeDriver...'
+                    sudo yum install -y epel-release
+                    sudo yum install -y wget unzip xorg-x11-server-Xvfb
+
+                    mkdir -p /opt/google/chrome
+                    cd /tmp
+                    wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+                    rpm2cpio google-chrome-stable_current_x86_64.rpm | cpio -idmv
+                    cp -r opt/google/chrome/* /opt/google/chrome/
+                    ln -sf /opt/google/chrome/google-chrome /usr/local/bin/google-chrome
+                    google-chrome --version
+                '''
+            }
+        }
+
+        stage('▶️ Start Angular App') {
             steps {
                 dir('frontend') {
-                    sh 'npm install'
+                    sh '''
+                        echo '[INFO] Lancement Xvfb...'
+                        Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+                        export DISPLAY=:99
+
+                        echo '[INFO] Lancement Angular dist/ avec serve...'
+                        nohup npx serve -s dist --listen 4200 > angular.log 2>&1 &
+
+                        echo '[INFO] Attente de l\'app Angular...'
+                        n=0
+                        until curl -s http://localhost:4200 > /dev/null; do
+                            sleep 2
+                            n=$((n+1))
+                            if [ $n -ge 30 ]; then
+                                echo '❌ Angular ne s\'est pas lancé'
+                                cat angular.log
+                                exit 1
+                            fi
+                        done
+                        echo '✅ Angular disponible sur http://localhost:4200'
+                    '''
                 }
             }
         }
 
-stage('🔧 Install Chrome') {
-  steps {
-    sh '''
-      echo "[INFO] Installation de Google Chrome dans Jenkins..."
-
-      mkdir -p /opt/google/chrome || true
-      cd /tmp
-      wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-
-      # Installer rpm2cpio et cpio s'ils ne sont pas déjà là (silencieusement)
-      which rpm2cpio || yum install -y rpm2cpio || true
-      which cpio || yum install -y cpio || true
-
-      # Extraire Chrome sans installation système
-      rpm2cpio google-chrome-stable_current_x86_64.rpm | cpio -idmv
-      cp -r opt/google/chrome/* /opt/google/chrome/
-
-      # Lien symbolique temporaire dans /usr/local/bin
-      mkdir -p /usr/local/bin || true
-      ln -sf /opt/google/chrome/google-chrome /usr/local/bin/google-chrome
-
-      echo "[INFO] Chrome installé manuellement."
-      /usr/local/bin/google-chrome --version || true
-    '''
-  }
-}
-        
-stage('📋 Vérif Chrome') {
-  steps {
-    sh 'which google-chrome || echo "Chrome pas encore installé"'
-  }
-}
-
-        stage('🧪 Test Frontend') {
+        stage('🧪 Selenium Tests') {
             steps {
                 dir('frontend') {
-                    sh 'npx mocha selenium-tests/*.spec.js'
+                    sh '''
+                        echo '[INFO] Exécution des tests...'
+                        DISPLAY=:99 npx mocha selenium-tests/*.spec.js || {
+                            echo '[❌] Échec des tests';
+                            cat selenium-tests/*.log || true;
+                            exit 1;
+                        }
+                    '''
                 }
             }
         }
 
-        stage('📁 Archive Rapport HTML') {
-            steps {
-                archiveArtifacts artifacts: 'frontend/selenium-tests/report.html', fingerprint: true
-            }
-        }
-
-        stage('🐳 Docker Build Frontend (avec dist)') {
+        stage('📁 Archive Rapport') {
             steps {
                 dir('frontend') {
-                    sh 'docker build -t grdf-frontend .'
+                    archiveArtifacts artifacts: 'selenium-tests/*.html', fingerprint: true
                 }
             }
         }
 
-        stage('📤 Envoi Rapport par Mail') {
+        stage('🐳 Docker Build Frontend') {
+            steps {
+                dir('frontend') {
+                    sh '''
+                        mkdir -p DockerDist
+                        cp -r dist/* DockerDist/
+                        docker build -t grdf-frontend:latest --build-arg APP_DIR=DockerDist .
+                    '''
+                }
+            }
+        }
+
+        stage('📤 Envoi Rapport') {
             steps {
                 dir('frontend') {
                     sh 'node selenium-tests/send-report.js'
                 }
             }
         }
-
     }
 
     post {
@@ -162,7 +178,7 @@ stage('📋 Vérif Chrome') {
             echo '❌ Échec de la pipeline.'
         }
         success {
-            echo '✅ Pipeline terminée avec succès.'
+            echo '✅ Pipeline exécutée avec succès !'
         }
     }
 }
