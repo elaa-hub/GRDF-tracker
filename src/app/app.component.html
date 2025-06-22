@@ -2,7 +2,6 @@
   <app-side-nav-inner-toolbar *ngIf="userRole === 'CLIENT' && !isClientRoute()"></app-side-nav-inner-toolbar>
   <router-outlet></router-outlet>
 </ng-container>
-
 <ng-template #loginOnly>
   <router-outlet></router-outlet>
 </ng-template>
