@@ -94,6 +94,22 @@ pipeline {
                 }
             }
         }
+        
+        stage('🔧 Préparation Environnement') {
+            steps {
+                sh '''
+                    echo "[INFO] Vérification et installation des outils nécessaires (jq, wget, unzip)..."
+
+                    sudo yum install -y epel-release || true
+                    sudo yum update -y
+                    sudo yum install -y jq wget unzip
+
+                    echo "[INFO] ✅ jq version : $(jq --version)"
+                    echo "[INFO] ✅ wget version : $(wget --version | head -n 1)"
+                    echo "[INFO] ✅ unzip version : $(unzip -v | head -n 1)"
+                '''
+            }
+        }
 
        stage('🧪 Test Frontend') {
     steps {
