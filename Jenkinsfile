@@ -128,6 +128,7 @@ export CHROME_BIN=$HOME/chrome/google-chrome #
             }
         }
     }
+    
     post {
         failure {
             echo '❌ Échec de la pipeline.'
