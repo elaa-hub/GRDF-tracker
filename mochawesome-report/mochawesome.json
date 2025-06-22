@@ -1,24 +1,24 @@
 {
   "stats": {
     "suites": 1,
-    "tests": 0,
-    "passes": 0,
+    "tests": 1,
+    "passes": 1,
     "pending": 0,
     "failures": 0,
-    "start": "2025-06-21T02:14:26.100Z",
-    "end": "2025-06-21T02:15:34.911Z",
-    "duration": 68811,
+    "start": "2025-06-22T17:57:11.226Z",
+    "end": "2025-06-22T17:57:17.626Z",
+    "duration": 6400,
     "testsRegistered": 1,
-    "passPercent": 0,
+    "passPercent": 100,
     "pendingPercent": 0,
-    "other": 1,
-    "hasOther": true,
-    "skipped": 1,
-    "hasSkipped": true
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
   },
   "results": [
     {
-      "uuid": "6fa1d5c9-2528-4b4f-b8f2-0f0e5e63da2c",
+      "uuid": "afc7807b-0226-4fac-8970-55a5b0f0ce5c",
       "title": "",
       "fullFile": "C:\\Users\\GIGABYTE\\Desktop\\PFE GRDF-tracker\\GRDF\\selenium-tests\\login.spec.js",
       "file": "\\selenium-tests\\login.spec.js",
@@ -27,30 +27,26 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "38b91433-67cf-4a06-acd7-2adc20c23beb",
+          "uuid": "21766296-5de2-46ca-b718-2a5805eb4d7f",
           "title": "🧪 GRDF Client: Signaler une défaillance",
           "fullFile": "C:\\Users\\GIGABYTE\\Desktop\\PFE GRDF-tracker\\GRDF\\selenium-tests\\login.spec.js",
           "file": "\\selenium-tests\\login.spec.js",
           "beforeHooks": [
             {
-              "title": "\"before all\" hook for \"should login and signal a defaillance correctly\"",
-              "fullTitle": "🧪 GRDF Client: Signaler une défaillance \"before all\" hook for \"should login and signal a defaillance correctly\"",
-              "timedOut": true,
-              "duration": 68802,
-              "state": "failed",
+              "title": "\"before all\" hook in \"🧪 GRDF Client: Signaler une défaillance\"",
+              "fullTitle": "🧪 GRDF Client: Signaler une défaillance \"before all\" hook in \"🧪 GRDF Client: Signaler une défaillance\"",
+              "timedOut": false,
+              "duration": 1577,
+              "state": null,
               "speed": null,
               "pass": false,
-              "fail": true,
+              "fail": false,
               "pending": false,
               "context": null,
-              "code": "const options = new chrome.Options();\noptions.addArguments('--headless');\noptions.addArguments('--disable-gpu');\noptions.addArguments('--no-sandbox');\noptions.addArguments('--disable-dev-shm-usage');\ndriver = await new Builder()\n  .forBrowser('chrome')\n  .setChromeOptions(options)\n  .build();",
-              "err": {
-                "message": "Error: Timeout of 60000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (C:\\Users\\GIGABYTE\\Desktop\\PFE GRDF-tracker\\GRDF\\selenium-tests\\login.spec.js)",
-                "estack": "Error: Timeout of 60000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves. (C:\\Users\\GIGABYTE\\Desktop\\PFE GRDF-tracker\\GRDF\\selenium-tests\\login.spec.js)\n    at listOnTimeout (node:internal/timers:581:17)\n    at process.processTimers (node:internal/timers:519:7)",
-                "diff": null
-              },
-              "uuid": "48abd759-1b37-4209-a935-2f7b26ffaa2d",
-              "parentUUID": "38b91433-67cf-4a06-acd7-2adc20c23beb",
+              "code": "const chromedriverPath = require('chromedriver').path;\nconst service = new chrome.ServiceBuilder(chromedriverPath);\nconst options = new chrome.Options();\noptions.setChromeBinaryPath('C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe');\noptions.addArguments('--no-sandbox');\noptions.addArguments('--disable-dev-shm-usage');\ndriver = await new Builder()\n  .forBrowser('chrome')\n  .setChromeService(service)\n  .setChromeOptions(options)\n  .build();",
+              "err": {},
+              "uuid": "d87d2599-91c9-4ed5-a147-14fd0337ac82",
+              "parentUUID": "21766296-5de2-46ca-b718-2a5805eb4d7f",
               "isHook": true,
               "skipped": false
             }
@@ -60,17 +56,17 @@
               "title": "\"after all\" hook in \"🧪 GRDF Client: Signaler une défaillance\"",
               "fullTitle": "🧪 GRDF Client: Signaler une défaillance \"after all\" hook in \"🧪 GRDF Client: Signaler une défaillance\"",
               "timedOut": false,
-              "duration": 1,
+              "duration": 83,
               "state": null,
               "speed": null,
               "pass": false,
               "fail": false,
               "pending": false,
               "context": null,
-              "code": "if (driver) await driver.quit();",
+              "code": "if (driver) {\n  await driver.quit();\n}",
               "err": {},
-              "uuid": "08c42646-e26b-4c2c-9615-be0354464328",
-              "parentUUID": "38b91433-67cf-4a06-acd7-2adc20c23beb",
+              "uuid": "5eb0478d-b5c3-4b90-8446-be589eb518c0",
+              "parentUUID": "21766296-5de2-46ca-b718-2a5805eb4d7f",
               "isHook": true,
               "skipped": false
             }
@@ -80,29 +76,29 @@
               "title": "should login and signal a defaillance correctly",
               "fullTitle": "🧪 GRDF Client: Signaler une défaillance should login and signal a defaillance correctly",
               "timedOut": false,
-              "duration": 0,
-              "state": null,
-              "speed": null,
-              "pass": false,
+              "duration": 4733,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
               "fail": false,
               "pending": false,
               "context": null,
-              "code": "await driver.get('http://localhost:4200');\nawait driver.findElement(By.name('email')).sendKeys('newclient@mail.com');\nawait driver.findElement(By.name('password')).sendKeys('12345');\nawait driver.findElement(By.css('button[type=\"submit\"]')).click();\nawait driver.wait(until.urlContains('/client'), 5000);\nconst defaillanceBtn = await driver.wait(\n  until.elementLocated(By.xpath(\"//button[contains(text(),'Signaler une défaillance')]\")), 5000);\nawait defaillanceBtn.click();\nawait driver.wait(until.urlContains('/client/report-issue'), 5000);\nconst adresseInput = await driver.findElement(By.id('houseAddress'));\nawait adresseInput.clear();\nawait adresseInput.sendKeys('Rue de la Tour, 75001 Paris');\nconst urgenceSelect = await driver.findElement(By.id('urgence'));\nawait urgenceSelect.click();\nawait driver.findElement(By.xpath(\"//option[contains(text(),'Non urgente')]\")).click();\nconst descTextArea = await driver.findElement(By.id('description'));\nawait driver.executeScript(`\n  const textarea = arguments[0];\n  textarea.value = 'Problème de fuite de gaz détecté';\n  textarea.dispatchEvent(new Event('input', { bubbles: true }));\n`, descTextArea);\nconst value = await driver.findElement(By.id('description')).getAttribute('value');\nexpect(value).to.equal('Problème de fuite de gaz détecté');\nconst submitBtn = await driver.findElement(By.css('button[type=\"submit\"]'));\nawait submitBtn.click();\nawait driver.wait(until.urlContains('/client/demander-technicien'), 5000);\nconst currentUrl = await driver.getCurrentUrl();\nexpect(currentUrl).to.include('/client/demander-technicien');",
+              "code": "await driver.get('http://localhost:4200');\nawait driver.findElement(By.name('email')).sendKeys('newclient@mail.com');\nawait driver.findElement(By.name('password')).sendKeys('12345');\nawait driver.findElement(By.css('button[type=\"submit\"]')).click();\nawait driver.wait(until.urlContains('/client'), 15000);\nconst defaillanceBtn = await driver.wait(\n  until.elementLocated(By.xpath(\"//button[contains(text(),'Signaler une défaillance')]\")),\n  5000\n);\nawait driver.wait(until.elementIsVisible(defaillanceBtn), 15000);\nawait driver.wait(until.elementIsEnabled(defaillanceBtn), 15000);\nawait driver.executeScript(\"arguments[0].scrollIntoView(true);\", defaillanceBtn);\nawait driver.executeScript(\"arguments[0].click();\", defaillanceBtn);\n// Vérifie le changement d'URL\nawait driver.wait(until.urlContains('/client/report-issue'), 15000);\nconst adresseInput = await driver.findElement(By.id('houseAddress'));\nawait adresseInput.clear();\nawait adresseInput.sendKeys('Rue de la Tour, 75001 Paris');\nconst urgenceSelect = await driver.findElement(By.id('urgence'));\nawait urgenceSelect.click();\nawait driver.findElement(By.xpath(\"//option[contains(text(),'Non urgente')]\")).click();\nconst descTextArea = await driver.wait(until.elementLocated(By.id('description')), 15000);\nawait driver.wait(until.elementIsVisible(descTextArea), 15000);\nawait driver.wait(until.elementIsEnabled(descTextArea), 15000);\nawait driver.executeScript(`\n  const textarea = document.getElementById('description');\n  textarea.value = 'Problème de fuite de gaz détecté';\n  textarea.dispatchEvent(new Event('input', { bubbles: true }));\n`);\nconst value = await driver.findElement(By.id('description')).getAttribute('value');\nconsole.log('📝 Champ description contient :', value);\nexpect(value).to.equal('Problème de fuite de gaz détecté');\nconst submitBtn = await driver.findElement(By.css('button[type=\"submit\"]'));\nawait driver.wait(until.elementIsVisible(submitBtn), 15000);\nawait driver.wait(until.elementIsEnabled(submitBtn), 15000);\nawait driver.executeScript(\"arguments[0].click();\", submitBtn);\ntry {\n  await driver.wait(until.urlContains('/client/demander-technicien'), 30000);\n  const currentUrl = await driver.getCurrentUrl();\n  expect(currentUrl).to.include('/client/demander-technicien');\n  console.log(\"✅ Formulaire soumis avec succès !\");\n} catch (error) {\n  const currentUrl = await driver.getCurrentUrl();\n  console.error(\"❌ Erreur de soumission. URL actuelle :\", currentUrl);\n  throw error;\n}",
               "err": {},
-              "uuid": "f69d9485-634d-4632-81f3-72fdacff129e",
-              "parentUUID": "38b91433-67cf-4a06-acd7-2adc20c23beb",
+              "uuid": "46f72180-d3b7-4903-abce-410226e25912",
+              "parentUUID": "21766296-5de2-46ca-b718-2a5805eb4d7f",
               "isHook": false,
-              "skipped": true
+              "skipped": false
             }
           ],
           "suites": [],
-          "passes": [],
+          "passes": [
+            "46f72180-d3b7-4903-abce-410226e25912"
+          ],
           "failures": [],
           "pending": [],
-          "skipped": [
-            "f69d9485-634d-4632-81f3-72fdacff129e"
-          ],
-          "duration": 0,
+          "skipped": [],
+          "duration": 4733,
           "root": false,
           "rootEmpty": false,
           "_timeout": 60000
