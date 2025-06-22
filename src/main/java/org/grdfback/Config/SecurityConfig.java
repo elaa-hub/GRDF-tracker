@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/tasks/tech/**").hasAuthority("TECH")
                         .requestMatchers("/api/tasks/**").hasAuthority("CLIENT")
                         .requestMatchers("/api/notifications/**").permitAll()
-
+                        .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().authenticated()
                 )
 
