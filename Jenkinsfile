@@ -94,8 +94,7 @@ pipeline {
                 }
             }
         }
-        
-       stage('🧪 Test Frontend') {
+     stage('🧪 Test Frontend') {
     steps {
         dir('frontend') {
             withEnv(["PATH+NODE=${tool 'NodeJS 20'}/bin"]) {
@@ -107,14 +106,14 @@ pipeline {
                     npm install -g @angular/cli
 
                     echo "[INFO] Installation de Google Chrome Linux..."
-                    cat <<EOF | sudo tee /etc/yum.repos.d/google-chrome.repo
+                    sudo bash -c 'cat <<EOF > /etc/yum.repos.d/google-chrome.repo
 [google-chrome]
 name=google-chrome
 baseurl=https://dl.google.com/linux/chrome/rpm/stable/x86_64
 enabled=1
 gpgcheck=1
 gpgkey=https://dl.google.com/linux/linux_signing_key.pub
-EOF
+EOF'
 
                     sudo yum install -y google-chrome-stable
 
@@ -147,6 +146,7 @@ EOF
         }
     }
 }
+
        stage('📁 Archive Rapport HTML') {
             steps {
                 dir('frontend') {
