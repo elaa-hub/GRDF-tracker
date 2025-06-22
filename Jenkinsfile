@@ -59,9 +59,10 @@ pipeline {
 
                         nohup ./mvnw spring-boot:run > backend.log 2>&1 &
 
-                        echo "[INFO] Attente du démarrage du backend (port 8080)..."
-                        n=0
-                        until curl -s http://localhost:8081/actuator/health | grep -q UP; do
+                             echo "[INFO] Attente du démarrage du backend (port 8081)..."
+                              n=0
+                             until curl -s http://localhost:8081/actuator/health | grep -q UP; do
+
                             sleep 2
                             n=$((n+1))
                             if [ $n -ge 30 ]; then
