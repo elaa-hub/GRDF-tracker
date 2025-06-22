@@ -112,7 +112,8 @@ pipeline {
                         Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
 
                         echo "[INFO] Lancement de l'app Angular..."
-                        nohup npm run start &> angular.log &
+                      nohup npx serve -s dist --listen 4200 > angular.log 2>&1 &
+
 
                         echo "[INFO] Attente de démarrage de l'app Angular..."
                         n=0
