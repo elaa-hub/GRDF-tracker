@@ -102,8 +102,7 @@ pipeline {
 
                     sudo yum install -y epel-release || true
                     sudo yum update -y
-                    sudo yum install -y jq wget unzip
-
+                    yum install -y jq wget unzip || true
                     echo "[INFO] ✅ jq version : $(jq --version)"
                     echo "[INFO] ✅ wget version : $(wget --version | head -n 1)"
                     echo "[INFO] ✅ unzip version : $(unzip -v | head -n 1)"
