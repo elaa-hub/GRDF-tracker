@@ -131,7 +131,7 @@ pipeline {
                         npm run test:login
 
                         echo "🛑 Arrêt de l'app Angular..."
-                        pkill -f "ng serve" || true
+                        pkill -f "npx serve" || true
                     '''
                 }
             }
