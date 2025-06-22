@@ -11,6 +11,8 @@ pipeline {
         FRONTEND_BRANCH = 'frontend'
         NPM_CACHE = "${WORKSPACE}/.npm"
         NPM_MODULES_CACHE = "/mnt/jenkins_data/cache_node_modules"
+        NODE_OPTIONS = "--max-old-space-size=8192"
+        CHROME_BIN = "$HOME/chrome/google-chrome"
     }
 
     triggers {
@@ -92,33 +94,37 @@ pipeline {
             }
         }
 
-stage('🔧 Install Chrome') {
-  steps {
-    sh '''
-      echo "[INFO] Installation de Google Chrome dans Jenkins (dossier personnel)..."
-      cd /tmp
-      wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-      rpm2cpio google-chrome-stable_current_x86_64.rpm | cpio -idmv
-      mkdir -p $HOME/chrome
-      cp -r ./opt/google/chrome/* $HOME/chrome/
-      echo "[INFO] Chrome installé dans $HOME/chrome"
-      $HOME/chrome/google-chrome --version || true
-    '''
-  }
-}
+        stage('🔧 Install Chrome') {
+            steps {
+                sh '''
+                    echo "[INFO] Installation de Google Chrome dans Jenkins (dossier personnel)..."
+                    cd /tmp
+                    wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+                    rpm2cpio google-chrome-stable_current_x86_64.rpm | cpio -idmv
+                    mkdir -p $HOME/chrome
+                    cp -r ./opt/google/chrome/* $HOME/chrome/
+                    echo "[INFO] Chrome installé dans $HOME/chrome"
+                    $HOME/chrome/google-chrome --version || true
+                '''
+            }
+        }
 
-
-        stage('🧪 Test Frontend') {
+        stage('🧪 Run Frontend Tests (Selenium)') {
             steps {
                 dir('frontend') {
-                    sh 'npx mocha selenium-tests/*.spec.js'
+                    sh '''
+                        export CHROME_BIN=$HOME/chrome/google-chrome
+                        npm run test:selenium || exit 1
+                    '''
                 }
             }
         }
 
-        stage('📁 Archive Rapport HTML') {
+        stage('📊 Génération du rapport HTML') {
             steps {
-                archiveArtifacts artifacts: 'frontend/selenium-tests/report.html', fingerprint: true
+                dir('frontend') {
+                    sh 'npm run generate-report || true'
+                }
             }
         }
 
@@ -149,5 +155,3 @@ stage('🔧 Install Chrome') {
         }
     }
 }
-
-
