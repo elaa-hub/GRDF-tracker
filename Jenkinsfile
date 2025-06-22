@@ -5,7 +5,6 @@ pipeline {
         maven 'mvn'
         nodejs 'NodeJS 20'
     }
-
     environment {
         BACKEND_BRANCH = 'backend'
         FRONTEND_BRANCH = 'frontend'
