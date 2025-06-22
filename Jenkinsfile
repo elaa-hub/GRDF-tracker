@@ -109,16 +109,36 @@ echo "[INFO] Installation de Google Chrome dans Jenkins (dossier personnel)..." 
             }
         }
 
-        stage('🧪 Run Frontend Tests (Selenium)') {
-            steps {
-                dir('frontend') {
-                    sh '''
-export CHROME_BIN=$HOME/chrome/google-chrome # 
-                         npm run test:login  || exit 1
-                    '''
-                }
-            }
-        }
+      stage('🧪 Serve & Run Frontend Tests (Selenium)') {
+  steps {
+    dir('frontend') {
+      sh '''
+        export CHROME_BIN=$HOME/chrome/google-chrome
+        # 1) lancer le serveur statique en arrière-plan
+        npm run start:dist &> server.log &
+        SERVER_PID=$!
+        # 2) attendre que la home soit joignable
+        n=0
+        until curl -s http://localhost:4200 > /dev/null; do
+          sleep 1
+          n=$((n+1))
+          if [ $n -gt 30 ]; then
+            echo "❌ Le serveur frontend n'a pas démarré dans 30s"
+            kill $SERVER_PID || true
+            exit 1
+          fi
+        done
+        echo "✅ Frontend servi sur http://localhost:4200"
+        # 3) lancer les tests Selenium
+        npm run test:login || TEST_EXIT=$?
+        # 4) arrêter le serveur
+        kill $SERVER_PID || true
+        exit ${TEST_EXIT:-0}
+      '''
+    }
+  }
+}
+
 
      stage('🐳 Docker Build Frontend (avec dist)') {
             steps {
