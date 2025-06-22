@@ -105,7 +105,7 @@ pipeline {
                 dir('frontend') {
                     sh '''
                         export CHROME_BIN=$HOME/chrome/google-chrome
-                        npm run start:dist &> server.log &
+                       npx http-server ./dist/GRDF-frontend -p 4200 > server.log &
                         SERVER_PID=$!
                         n=0
                         until curl -s http://localhost:4200 > /dev/null; do
