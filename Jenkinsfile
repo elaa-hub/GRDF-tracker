@@ -12,7 +12,7 @@ pipeline {
         NPM_CACHE = "${WORKSPACE}/.npm"
         NPM_MODULES_CACHE = "/mnt/jenkins_data/cache_node_modules"
         NODE_OPTIONS = "--max-old-space-size=8192"
-        CHROME_BIN = "$HOME/chrome/google-chrome" // 🆕 Pour les tests headless avec Chrome
+        CHROME_BIN = "$HOME/chrome/google-chrome" 
     }
 
     triggers {
@@ -57,7 +57,7 @@ pipeline {
                     sh '''
                         echo '[INFO] Lancement du backend Spring Boot...'
                         chmod +x ./mvnw
-                        nohup ./mvnw spring-boot:run & // 🆕 Lance Spring Boot en arrière-plan
+                        nohup ./mvnw spring-boot:run & 
                         echo '[INFO] Attente du démarrage du backend (port 8081)...'
                         n=0
                         until curl -s http://localhost:8081/actuator/health | grep -q UP; do
@@ -89,8 +89,7 @@ pipeline {
         stage('🔧 Install Chrome') {
             steps {
                 sh '''
-                    echo "[INFO] Installation de Google Chrome dans Jenkins (dossier personnel)..." // 🆕
-                    cd /tmp
+                    echo "[INFO] Installation de Google Chrome dans Jenkins (dossier personnel)..." 
                     wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
                     rpm2cpio google-chrome-stable_current_x86_64.rpm | cpio -idmv
                     mkdir -p $HOME/chrome
@@ -106,7 +105,7 @@ pipeline {
                 dir('frontend') {
                     sh '''
                         export CHROME_BIN=$HOME/chrome/google-chrome
-                        npm run start:dist &> server.log & // 🆕 Démarrage du serveur Angular avec http-server
+                        npm run start:dist &> server.log &
                         SERVER_PID=$!
                         n=0
                         until curl -s http://localhost:4200 > /dev/null; do
@@ -119,8 +118,8 @@ pipeline {
                           fi
                         done
                         echo "✅ Frontend servi sur http://localhost:4200"
-                        npm run test:login || TEST_EXIT=$? // 🆕 Lancement des tests Selenium
-                        kill $SERVER_PID || true // 🆕 Arrêt du serveur
+                        npm run test:login || TEST_EXIT=$? 
+                        kill $SERVER_PID || true 
                         exit ${TEST_EXIT:-0}
                     '''
                 }
@@ -130,7 +129,7 @@ pipeline {
         stage('🐳 Docker Build Frontend (avec dist)') {
             steps {
                 dir('frontend') {
-                    sh 'docker build -t grdf-frontend .' // Build Docker final
+                    sh 'docker build -t grdf-frontend .' 
                 }
             }
         }
