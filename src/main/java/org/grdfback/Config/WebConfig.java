@@ -8,7 +8,7 @@
         @Override
         public void addCorsMappings(CorsRegistry registry) {
             registry.addMapping("/**")
-                    .allowedOrigins("https://grdf-tracker-ella.duckdns.org")
+                    .allowedOrigins("http://grdf-tracker-frontend.s3-website.eu-north-1.amazonaws.com")
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowedHeaders("*")
                     .allowCredentials(true);
