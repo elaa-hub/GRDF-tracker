@@ -11,7 +11,6 @@ pipeline {
         FRONTEND_BRANCH = 'frontend'
         NPM_CACHE = "${WORKSPACE}/.npm"
         NPM_MODULES_CACHE = "/mnt/jenkins_data/cache_node_modules"
-        NODE_OPTIONS = "--max-old-space-size=8192"
     }
 
     triggers {
@@ -19,7 +18,6 @@ pipeline {
     }
 
     stages {
-
         stage('📦 Checkout Backend') {
             steps {
                 dir('backend') {
@@ -42,30 +40,34 @@ pipeline {
             }
         }
 
-        stage('🔧 Build Backend') {
+        stage('⚙️ Build Backend') {
             steps {
                 dir('backend') {
-                    sh 'mvn clean install -DskipTests'
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
 
-        stage('⚙️ Build Angular App (hors Docker)') {
+        stage('🚀 Lancer Backend Spring') {
             steps {
-                dir('frontend') {
+                dir('backend') {
                     sh '''
-                        npm ci --prefer-offline --no-audit
-                        rm -f ./node_modules/.ngcc_lock_file
-                        npm run build -- --configuration production --no-progress
-                    '''
-                }
-            }
-        }
+                        echo "[INFO] Lancement du backend Spring Boot..."
+                        nohup java -jar target/GRDFBack-0.0.1-SNAPSHOT.jar > backend.log 2>&1 &
 
-        stage('📦 Install Frontend Dependencies') {
-            steps {
-                dir('frontend') {
-                    sh 'npm install'
+                        echo "[INFO] Attente que le backend soit prêt..."
+                        n=0
+                        until curl -s http://localhost:8080/api/auth/login -X POST -H "Content-Type: application/json" -d '{}' | grep -q "Bad Request"; do
+                          sleep 2
+                          n=$((n+1))
+                          if [ $n -ge 30 ]; then
+                            echo "❌ Backend ne répond pas après 60s"
+                            cat backend.log
+                            exit 1
+                          fi
+                        done
+                        echo "✅ Backend prêt, on continue..."
+                    '''
                 }
             }
         }
@@ -74,82 +76,29 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh '''
-                        set -e
-                        export DISPLAY=:99
-
-                        echo "[INFO] Installation CLI Angular globale..."
-                        npm install -g @angular/cli
-
-                        echo "[INFO] Démarrage de Xvfb..."
-                        sudo yum install -y xorg-x11-server-Xvfb > /dev/null 2>&1 || true
-                        Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+                        echo "[INFO] Installation des dépendances Angular..."
+                        npm install --cache ${NPM_CACHE} --prefer-offline
 
                         echo "[INFO] Lancement de l'app Angular..."
-                        nohup npm run start &> angular.log &
+                        nohup npm run start > angular.log 2>&1 &
 
-                        echo "[INFO] Attente de démarrage de l'app Angular..."
+                        echo "[INFO] Attente que l'app Angular soit prête..."
                         n=0
-                        until curl -s http://localhost:4200 > /dev/null; do
-                            sleep 2
-                            n=$((n+1))
-                            if [ $n -ge 30 ]; then
-                                echo "❌ Angular ne s'est pas lancé après 60s."
-                                cat angular.log
-                                exit 1
-                            fi
+                        until curl -s http://localhost:4200 | grep -q "email"; do
+                          sleep 2
+                          n=$((n+1))
+                          if [ $n -ge 30 ]; then
+                            echo "❌ Angular ne répond pas après 60s"
+                            cat angular.log
+                            exit 1
+                          fi
                         done
+                        echo "✅ Angular est prêt ! Lancement des tests Selenium..."
 
-                        echo "✅ Angular lancé, exécution des tests..."
                         npm run test:login
-
-                        echo "🛑 Arrêt de l'app Angular..."
-                        pkill -f "ng serve" || true
                     '''
                 }
             }
-        }
-
-        stage('📁 Archive Rapport HTML') {
-            steps {
-                dir('frontend') {
-                    archiveArtifacts artifacts: 'mochawesome-report/*.html', fingerprint: true
-                }
-            }
-        }
-
-        stage('🐳 Docker Build Frontend (avec dist)') {
-            steps {
-                dir('frontend') {
-                    script {
-                        sh '''
-                            echo "[INFO] Listing dist directory contents:"
-                            ls -l dist
-                            echo "[INFO] Copie vers DockerDist"
-                            rm -rf DockerDist
-                            mkdir DockerDist
-                            cp -r dist/* DockerDist/
-                        '''
-                        docker.build('grdf-frontend:latest', '--build-arg APP_DIR=DockerDist .')
-                    }
-                }
-            }
-        }
-
-        stage('📤 Envoi Rapport par Mail') {
-            steps {
-                dir('frontend') {
-                    sh 'node selenium-tests/send-report.js'
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo '✅ Pipeline exécutée avec succès!'
-        }
-        failure {
-            echo '❌ Échec de la pipeline.'
         }
     }
 }
