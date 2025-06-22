@@ -114,37 +114,19 @@ echo "[INFO] Installation de Google Chrome dans Jenkins (dossier personnel)..." 
                 dir('frontend') {
                     sh '''
 export CHROME_BIN=$HOME/chrome/google-chrome # 
-                        npm run test:selenium || exit 1
+                         npm run test:login  || exit 1
                     '''
                 }
             }
         }
 
-        stage('📊 Génération du rapport HTML') {
-            steps {
-                dir('frontend') {
-                    sh 'npm run generate-report || true'
-                }
-            }
-        }
-
-        stage('🐳 Docker Build Frontend (avec dist)') {
+     stage('🐳 Docker Build Frontend (avec dist)') {
             steps {
                 dir('frontend') {
                     sh 'docker build -t grdf-frontend .'
                 }
             }
         }
-
-        stage('📤 Envoi Rapport par Mail') {
-            steps {
-                dir('frontend') {
-                    sh 'node selenium-tests/send-report.js'
-                }
-            }
-        }
-
-    }
 
     post {
         failure {
