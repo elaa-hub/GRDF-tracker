@@ -92,7 +92,38 @@ pipeline {
             }
         }
 
-        // 🔧 ÉTAPE SUPPRIMÉE ICI : Préparation environnement avec sudo
+stage('🔧 Install Chrome') {
+  steps {
+    sh '''
+      echo "[INFO] Installation de Google Chrome dans Jenkins..."
+
+      mkdir -p /opt/google/chrome || true
+      cd /tmp
+      wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
+      # Installer rpm2cpio et cpio s'ils ne sont pas déjà là (silencieusement)
+      which rpm2cpio || yum install -y rpm2cpio || true
+      which cpio || yum install -y cpio || true
+
+      # Extraire Chrome sans installation système
+      rpm2cpio google-chrome-stable_current_x86_64.rpm | cpio -idmv
+      cp -r opt/google/chrome/* /opt/google/chrome/
+
+      # Lien symbolique temporaire dans /usr/local/bin
+      mkdir -p /usr/local/bin || true
+      ln -sf /opt/google/chrome/google-chrome /usr/local/bin/google-chrome
+
+      echo "[INFO] Chrome installé manuellement."
+      /usr/local/bin/google-chrome --version || true
+    '''
+  }
+}
+        
+stage('📋 Vérif Chrome') {
+  steps {
+    sh 'which google-chrome || echo "Chrome pas encore installé"'
+  }
+}
 
         stage('🧪 Test Frontend') {
             steps {
