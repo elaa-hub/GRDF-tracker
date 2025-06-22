@@ -55,6 +55,8 @@ pipeline {
                 dir('backend') {
                     sh '''
                         echo "[INFO] Lancement du backend Spring Boot..."
+                                        chmod +x ./mvnw
+
                         nohup ./mvnw spring-boot:run > backend.log 2>&1 &
 
                         echo "[INFO] Attente du démarrage du backend (port 8080)..."
