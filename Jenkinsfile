@@ -65,18 +65,20 @@ pipeline {
     }
     
 stage('🚀 Déploiement Ansible Backend') {
-      steps {
-        dir('backend') {
-          withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-grdf', keyFileVariable: 'SSH_KEY')]) {
-            sh '''
-              echo "[INFO] Déploiement backend avec Ansible..."
-              ansible-playbook -i inventory.ini playbook.yml \
-                --private-key $SSH_KEY -u ec2-user
-            '''
-          }
-        }
+  steps {
+    dir('backend') {
+      withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-grdf', keyFileVariable: 'SSH_KEY')]) {
+        sh '''
+          echo "[INFO] Déploiement backend avec Ansible..."
+          chmod 600 "$SSH_KEY"  # 🔒 Important pour éviter les erreurs de permission
+          ansible-playbook -i inventory.ini playbook.yml \
+            --private-key "$SSH_KEY" -u ec2-user
+        '''
       }
     }
+  }
+}
+
     stage('▶️ Start Backend') {
       steps {
         dir('backend') {
