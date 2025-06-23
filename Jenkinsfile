@@ -92,8 +92,9 @@ pipeline {
             sh '''
               echo "[INFO] Déploiement backend avec Ansible..."
               chmod 600 "$SSH_KEY"
-              ansible-playbook -i inventory.ini playbook.yml \
-                --private-key "$SSH_KEY" -u ec2-user
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini playbook.yml \
+  --private-key "$SSH_KEY" -u ec2-user
+
             '''
           }
         }
