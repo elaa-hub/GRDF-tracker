@@ -81,6 +81,7 @@ pipeline {
                         npm ci --prefer-offline --no-audit
                         rm -f ./node_modules/.ngcc_lock_file
                         npm run build -- --configuration production --no-progress
+                          ls -l ./dist || echo "❌ Dossier dist manquant !" 
                     '''
                 }
             }
@@ -105,8 +106,8 @@ pipeline {
                 dir('frontend') {
                     sh '''
                         export CHROME_BIN=$HOME/chrome/google-chrome
-                       npx http-server ./dist/GRDF-frontend -p 4200 > server.log &
-                        SERVER_PID=$!
+                      n px http-server ./dist/GRDF-frontend -p 4200 > server.log &
+                         SERVER_PID=$!
                         n=0
                         until curl -s http://localhost:4200 > /dev/null; do
                           sleep 1
