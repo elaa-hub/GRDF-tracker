@@ -14,7 +14,6 @@ pipeline {
         NODE_OPTIONS = "--max-old-space-size=8192"
         CHROME_BIN = "$HOME/chrome/google-chrome" 
     }
-    
 
     triggers {
         githubPush()
@@ -135,7 +134,7 @@ pipeline {
             }
         }
 
-               stage('📄 Archive Test Reports') {
+        stage('📄 Archive Test Reports') {
             steps {
                 dir('frontend') {
                     publishHTML(target: [
@@ -162,4 +161,4 @@ pipeline {
             echo '✅ Pipeline terminée avec succès.'
         }
     }
-} 
+}
