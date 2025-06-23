@@ -14,6 +14,7 @@ pipeline {
     NODE_OPTIONS = "--max-old-space-size=8192"
     CHROME_BIN = "/usr/bin/google-chrome"
     SONARQUBE_ENV = "sonarqube"
+    DOCKER_IMAGE = 'elaa25/grdf-backend:latest'
   }
 
   triggers {
@@ -64,14 +65,37 @@ pipeline {
       }
     }
 
+    stage('🐳 Docker Build & Push') {
+      steps {
+        dir('backend') {
+          withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+            sh '''
+              echo "[INFO] 🔧 Construction de l'image Docker..."
+              docker build -t $DOCKER_USER/grdf-backend:latest .
+
+              echo "[INFO] 🔐 Connexion à Docker Hub..."
+              echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+              echo "[INFO] 🚀 Push de l'image vers Docker Hub..."
+              docker push $DOCKER_USER/grdf-backend:latest
+            '''
+          }
+        }
+      }
+    }
+
+
     stage('🚀 Déploiement Ansible Backend') {
       steps {
-        withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-grdf', keyFileVariable: 'SSH_KEY')]) {
-          sh '''
-            echo "[INFO] Déploiement Ansible depuis Jenkins..."
-            ssh -i $SSH_KEY -o StrictHostKeyChecking=no ec2-user@172.31.19.166 \
-              'ansible-playbook -i ~/ansible/grdf/inventory.ini ~/ansible/grdf/playbook.yml'
-          '''
+        dir('backend') {
+          withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-grdf', keyFileVariable: 'SSH_KEY')]) {
+            sh '''
+              echo "[INFO] Déploiement backend avec Ansible..."
+              chmod 600 "$SSH_KEY"
+              ansible-playbook -i inventory.ini playbook.yml \
+                --private-key "$SSH_KEY" -u ec2-user
+            '''
+          }
         }
       }
     }
