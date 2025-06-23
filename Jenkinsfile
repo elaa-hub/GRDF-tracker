@@ -13,6 +13,7 @@ pipeline {
     NPM_MODULES_CACHE = "/mnt/jenkins_data/cache_node_modules"
     NODE_OPTIONS = "--max-old-space-size=8192"
     CHROME_BIN = "/usr/bin/google-chrome"
+    SONARQUBE_ENV = "sonarqube" // correspond à l'ID dans Jenkins (⚠️ sans espace)
   }
 
   triggers {
@@ -47,6 +48,24 @@ pipeline {
       steps {
         dir('backend') {
           sh 'mvn clean install -DskipTests'
+        }
+      }
+    }
+
+    stage('🔍 Analyse SonarQube') {
+      steps {
+        dir('backend') {
+          withSonarQubeEnv("${env.SONARQUBE_ENV}") {
+            sh 'mvn verify sonar:sonar'
+          }
+        }
+      }
+    }
+
+    stage('✅ Sonar Quality Gate') {
+      steps {
+        timeout(time: 1, unit: 'MINUTES') {
+          waitForQualityGate abortPipeline: true
         }
       }
     }
