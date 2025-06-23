@@ -1,0 +1,13 @@
+---
+- name: Déploiement du backend GRDF sur EC2
+  hosts: backend
+  become: yes
+  tasks:
+    - name: Arrêter l'ancien conteneur s'il existe
+      shell: docker stop grdf-backend && docker rm grdf-backend || true
+
+    - name: Supprimer l'image existante (optionnel)
+      shell: docker rmi elaa25/grdf-backend:latest || true
+
+    - name: Lancer le nouveau conteneur backend
+      shell: docker run -d --name grdf-backend -p 8080:8080 elaa25/grdf-backend:latest
