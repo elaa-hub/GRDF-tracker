@@ -44,17 +44,24 @@ describe('🧪 GRDF Client: Signaler une défaillance', function () {
     try {
       await driver.get('http://grdf-tracker-frontend.s3-website.eu-north-1.amazonaws.com/#/home');
 
+      // ✅ Attente explicite des champs email et mot de passe
+      await driver.wait(until.elementLocated(By.css('[formControlName="email"]')), 15000);
+      await driver.wait(until.elementLocated(By.css('[formControlName="password"]')), 15000);
+
       const emailInput = await driver.findElement(By.css('[formControlName="email"]'));
       const passwordInput = await driver.findElement(By.css('[formControlName="password"]'));
+
       await emailInput.sendKeys('newclient@mail.com');
-        await passwordInput.sendKeys('12345');
+      await passwordInput.sendKeys('12345');
 
       const loginButton = await driver.findElement(By.css('button[type="submit"]'));
       await driver.wait(until.elementIsEnabled(loginButton), 10000);
       await loginButton.click();
 
+      // ✅ Attendre la redirection vers l’espace client
       await driver.wait(until.urlContains('/client'), 15000);
 
+      // ✅ Attente explicite du bouton de signalement
       const defaillanceBtn = await driver.wait(
         until.elementLocated(By.xpath("//button[contains(text(),'Signaler une défaillance')]")),
         15000
@@ -63,6 +70,7 @@ describe('🧪 GRDF Client: Signaler une défaillance', function () {
       await driver.executeScript("arguments[0].scrollIntoView(true);", defaillanceBtn);
       await driver.executeScript("arguments[0].click();", defaillanceBtn);
 
+      // ✅ Attendre la page de signalement
       await driver.wait(until.urlContains('/client/report-issue'), 15000);
 
       const adresseInput = await driver.findElement(By.id('houseAddress'));
@@ -73,14 +81,14 @@ describe('🧪 GRDF Client: Signaler une défaillance', function () {
       await urgenceSelect.click();
       await driver.findElement(By.xpath("//option[contains(text(),'Non urgente')]")).click();
 
-      const descTextArea = await driver.findElement(By.id('description'));
+      const descTextArea = await driver.wait(until.elementLocated(By.id('description')), 10000);
       await driver.wait(until.elementIsVisible(descTextArea), 10000);
 
       await driver.executeScript(`
-        const textarea = document.getElementById('description');
-        textarea.value = 'Problème de fuite de gaz détecté';
-        textarea.dispatchEvent(new Event('input', { bubbles: true }));
-      `);
+      const textarea = document.getElementById('description');
+      textarea.value = 'Problème de fuite de gaz détecté';
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    `);
 
       const value = await driver.findElement(By.id('description')).getAttribute('value');
       console.log('📝 Champ description contient :', value);
@@ -90,6 +98,7 @@ describe('🧪 GRDF Client: Signaler une défaillance', function () {
       await driver.wait(until.elementIsVisible(submitBtn), 10000);
       await driver.executeScript("arguments[0].click();", submitBtn);
 
+      // ✅ Vérifie la redirection après soumission
       await driver.wait(until.urlContains('/client/demander-technicien'), 20000);
       const currentUrl = await driver.getCurrentUrl();
       console.log("✅ Formulaire soumis avec succès :", currentUrl);
@@ -102,4 +111,5 @@ describe('🧪 GRDF Client: Signaler une défaillance', function () {
       throw error;
     }
   });
+
 });
