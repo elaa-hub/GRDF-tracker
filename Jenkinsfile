@@ -13,7 +13,7 @@ pipeline {
     NPM_MODULES_CACHE = "/mnt/jenkins_data/cache_node_modules"
     NODE_OPTIONS = "--max-old-space-size=8192"
     CHROME_BIN = "/usr/bin/google-chrome"
-    SONARQUBE_ENV = "sonarqube" 
+    SONARQUBE_ENV = "sonarqube"
   }
 
   triggers {
@@ -52,7 +52,7 @@ pipeline {
       }
     }
 
-    stage('🔍 Analyse SonarQube ') {
+    stage('🔍 Analyse SonarQube') {
       steps {
         dir('backend') {
           withSonarQubeEnv("${env.SONARQUBE_ENV}") {
@@ -63,29 +63,26 @@ pipeline {
         }
       }
     }
-    
-stage('🚀 Déploiement Ansible Backend') {
-  steps {
-    dir('backend') {
-      withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-grdf', keyFileVariable: 'SSH_KEY')]) {
-        sh '''
-          echo "[INFO] Déploiement backend avec Ansible..."
-          ansible-playbook \
-            -i /home/ec2-user/ansible/grdf/inventory.ini \
-            /home/ec2-user/ansible/grdf/playbook.yml \
-            --private-key $SSH_KEY -u ec2-user
-        '''
+
+    stage('🚀 Déploiement Ansible Backend') {
+      steps {
+        withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-grdf', keyFileVariable: 'SSH_KEY')]) {
+          sh '''
+            echo "[INFO] Déploiement Ansible depuis Jenkins..."
+            ssh -i $SSH_KEY -o StrictHostKeyChecking=no ec2-user@172.31.19.166 \
+              'ansible-playbook -i ~/ansible/grdf/inventory.ini ~/ansible/grdf/playbook.yml'
+          '''
+        }
       }
     }
-  }
-}
+
     stage('▶️ Start Backend') {
       steps {
         dir('backend') {
           sh '''
             echo '[INFO] Lancement du backend Spring Boot...'
             chmod +x ./mvnw
-            nohup ./mvnw spring-boot:run & 
+            nohup ./mvnw spring-boot:run &
             echo '[INFO] Attente du démarrage du backend (port 8081)...'
             n=0
             until curl -s http://localhost:8081/actuator/health | grep -q UP; do
