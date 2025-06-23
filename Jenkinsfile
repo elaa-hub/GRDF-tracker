@@ -52,16 +52,16 @@ pipeline {
       }
     }
 
-    stage('🔍 SonarQube Analysis') {
+    stage('🔍 Analyse SonarQube & Quality Gate') {
       steps {
         dir('backend') {
           withSonarQubeEnv("${env.SONARQUBE_ENV}") {
             withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
-              sh 'mvn verify sonar:sonar -Dsonar.login=$SONAR_TOKEN'
+              sh 'mvn verify sonar:sonar -Dsonar.token=$SONAR_TOKEN'
             }
           }
         }
-        timeout(time: 1, unit: 'MINUTES') {
+        timeout(time: 3, unit: 'MINUTES') {
           waitForQualityGate abortPipeline: true
         }
       }
