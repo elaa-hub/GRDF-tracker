@@ -100,39 +100,42 @@ pipeline {
             }
         }
 
-        stage('🧪 Serve & Run Frontend Tests (Selenium)') {
-            steps {
-                dir('frontend') {
-                    sh '''
-                        export CHROME_BIN=$HOME/chrome/google-chrome
-                        npx http-server ./dist/DevExtreme-app -p 4200 > server.log &
-                        SERVER_PID=$!
-                        n=0
-                        until curl -s http://localhost:4200 > /dev/null; do
-                          sleep 1
-                          n=$((n+1))
-                          if [ $n -gt 30 ]; then
-                            echo "❌ Le serveur frontend n'a pas démarré dans 30s"
-                            kill $SERVER_PID || true
-                            exit 1
-                          fi
-                        done
-                        echo "✅ Frontend servi sur http://localhost:4200"
-                        npx mocha selenium-tests/login.spec.js --reporter mochawesome || TEST_EXIT=$?
-                        kill $SERVER_PID || true 
-                        exit ${TEST_EXIT:-0}
-                    '''
-                }
-            }
-        }
+        stage('⚙️ Build Docker Frontend') {
+  steps {
+    dir('frontend') {
+      sh 'docker build -t grdf-frontend .'
+    }
+  }
+}
 
-        stage('🐳 Docker Build Frontend (avec dist)') {
-            steps {
-                dir('frontend') {
-                    sh 'docker build -t grdf-frontend .'
-                }
-            }
-        }
+stage('🧪 Selenium Test Frontend via Docker') {
+  steps {
+    script {
+      sh '''
+        docker run -d -p 4200:8080 --name frontend-test grdf-frontend
+
+        echo "⏳ Attente démarrage serveur Angular..."
+        sleep 3
+        for i in {1..30}; do
+          if curl -s http://localhost:4200 > /dev/null; then
+            echo "✅ Serveur prêt"
+            break
+          fi
+          sleep 1
+        done
+
+        cd frontend
+        npm ci
+        npx mocha selenium-tests/login.spec.js --reporter mochawesome || TEST_EXIT=$?
+
+        docker stop frontend-test || true
+        docker rm frontend-test || true
+        exit ${TEST_EXIT:-0}
+      '''
+    }
+  }
+}
+
 
         stage('📄 Archive Test Reports') {
             steps {
