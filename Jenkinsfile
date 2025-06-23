@@ -161,3 +161,4 @@ post {
         echo '✅ Pipeline terminée avec succès.'
     }
 }
+}
