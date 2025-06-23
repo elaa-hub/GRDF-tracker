@@ -1,16 +1,33 @@
-FROM node:20
+# Étape 1 : build Angular
+FROM node:20 AS builder
 
-# Crée le répertoire d'app
 WORKDIR /app
 
-# Build argument : chemin du dossier Angular
-ARG APP_DIR
+# Copie uniquement les fichiers nécessaires pour l'installation
+COPY package*.json ./
 
-# Copie le build Angular dans /app/dist
-COPY ${APP_DIR} ./dist
+# Installation des dépendances
+RUN npm ci
 
-# Installe un serveur statique (http-server)
+# Copie tout le code source
+COPY . .
+
+# Build Angular (tu peux ajouter --configuration=production si besoin)
+RUN npm run build
+
+# Étape 2 : serveur statique avec http-server
+FROM node:20
+
+WORKDIR /app
+
+# Installe http-server
 RUN npm install -g http-server
 
-# Démarre le serveur
+# Copie le build généré depuis l’étape précédente
+COPY --from=builder /app/dist/DevExtreme-app ./dist
+
+# Expose port 8080 (par défaut http-server utilise 8080)
+EXPOSE 8080
+
+# Commande de démarrage
 CMD ["http-server", "dist"]

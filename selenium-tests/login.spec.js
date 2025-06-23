@@ -42,12 +42,12 @@ describe('🧪 GRDF Client: Signaler une défaillance', function () {
 
   it('should login and signal a defaillance correctly', async () => {
     try {
-      await driver.get('http://localhost:4200/#/auth/login');
+      await driver.get('http://grdf-tracker-frontend.s3-website.eu-north-1.amazonaws.com/#/home');
 
       const emailInput = await driver.findElement(By.css('[formControlName="email"]'));
       const passwordInput = await driver.findElement(By.css('[formControlName="password"]'));
       await emailInput.sendKeys('newclient@mail.com');
-      await passwordInput.sendKeys('12345');
+        await passwordInput.sendKeys('12345');
 
       const loginButton = await driver.findElement(By.css('button[type="submit"]'));
       await driver.wait(until.elementIsEnabled(loginButton), 10000);
