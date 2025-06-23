@@ -134,7 +134,7 @@ pipeline {
             }
         }
 
-        stage('📄 Archive Test Reports') {
+               stage('📄 Archive Test Reports') {
             steps {
                 dir('frontend') {
                     publishHTML(target: [
@@ -150,15 +150,15 @@ pipeline {
         }
     }
 
-post {
-    always {
-        archiveArtifacts artifacts: 'frontend/login-page-before-click.png', fingerprint: true
+    post {
+        always {
+            archiveArtifacts artifacts: 'frontend/login-page-before-click.png', fingerprint: true
+        }
+        failure {
+            echo '❌ Échec de la pipeline.'
+        }
+        success {
+            echo '✅ Pipeline terminée avec succès.'
+        }
     }
-    failure {
-        echo '❌ Échec de la pipeline.'
-    }
-    success {
-        echo '✅ Pipeline terminée avec succès.'
-    }
-}
-}
+} 
