@@ -14,6 +14,7 @@ pipeline {
         NODE_OPTIONS = "--max-old-space-size=8192"
         CHROME_BIN = "$HOME/chrome/google-chrome" 
     }
+    
 
     triggers {
         githubPush()
