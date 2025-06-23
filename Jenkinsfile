@@ -13,7 +13,7 @@ pipeline {
     NPM_MODULES_CACHE = "/mnt/jenkins_data/cache_node_modules"
     NODE_OPTIONS = "--max-old-space-size=8192"
     CHROME_BIN = "/usr/bin/google-chrome"
-    SONARQUBE_ENV = "sonarqube" // correspond à l'ID dans Jenkins
+    SONARQUBE_ENV = "sonarqube" 
   }
 
   triggers {
