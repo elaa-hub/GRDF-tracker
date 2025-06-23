@@ -66,13 +66,14 @@ pipeline {
     
 stage('🚀 Déploiement Ansible Backend') {
     steps {
-        withCredentials([sshUserPrivateKey(credentialsId: 'YOUR_KEY_ID', keyFileVariable: 'SSH_KEY')]) {
-            sh '''
-                echo '[INFO] Déploiement backend avec Ansible...'
-                chmod 600 $SSH_KEY
-                ansible-playbook -i ansible/grdf/inventory.ini ansible/grdf/playbook.yml --private-key $SSH_KEY -u ec2-user
-            '''
-        }
+        withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-grdf', keyFileVariable: 'SSH_KEY')]) {
+    sh '''
+      chmod 600 $SSH_KEY
+      ansible-playbook -i ../ansible/grdf/inventory.ini ../ansible/grdf/playbook.yml \
+        --private-key $SSH_KEY -u ec2-user
+    '''
+}
+
     }
 }
 
