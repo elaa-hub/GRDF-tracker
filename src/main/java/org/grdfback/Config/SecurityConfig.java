@@ -40,16 +40,16 @@ public class SecurityConfig {
                                 "/api/clients/client/address",
                                 "/api/hello",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
-
+                                "/v3/api-docs/**",
+                                "/actuator/health",
+                                "/actuator/prometheus"
                         ).permitAll()
-
                         .requestMatchers("/api/tasks/tech/**").hasAuthority("TECH")
                         .requestMatchers("/api/tasks/**").hasAuthority("CLIENT")
                         .requestMatchers("/api/notifications/**").permitAll()
-                        .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().authenticated()
                 )
+
 
                 .sessionManagement(sess -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
