@@ -150,12 +150,14 @@ pipeline {
         }
     }
 
-    post {
-        failure {
-            echo '❌ Échec de la pipeline.'
-        }
-        success {
-            echo '✅ Pipeline terminée avec succès.'
-        }
+post {
+    always {
+        archiveArtifacts artifacts: 'frontend/login-page-before-click.png', fingerprint: true
+    }
+    failure {
+        echo '❌ Échec de la pipeline.'
+    }
+    success {
+        echo '✅ Pipeline terminée avec succès.'
     }
 }
