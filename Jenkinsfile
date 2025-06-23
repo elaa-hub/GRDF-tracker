@@ -91,16 +91,19 @@ stage('🚀 Déploiement Ansible Backend') {
         sh '''
           echo "[INFO] 🔑 Déploiement backend avec Ansible..."
           chmod 600 "$SSH_KEY"
-          ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook \
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible-playbook \
             -i inventory.ini \
             playbook.yml \
-            --private-key "$SSH_KEY" \
-            -u "$SSH_USER"
+            --private-key="$SSH_KEY" \
+            -u "$SSH_USER" \
+            -vvvv
         '''
       }
     }
   }
 }
+
 
     stage('▶️ Start Backend') {
       steps {
