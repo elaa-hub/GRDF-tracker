@@ -83,21 +83,14 @@ pipeline {
         }
       }
     }
-
 stage('🚀 Déploiement Ansible Backend') {
   steps {
     dir('backend') {
-      withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-grdf', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+      withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-ansible', keyFileVariable: 'SSH_KEY')]) {
         sh '''
-          echo "[INFO] 🔑 Déploiement backend avec Ansible..."
-          chmod 600 "$SSH_KEY"
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook \
-            -i inventory.ini \
-            playbook.yml \
-            --private-key="$SSH_KEY" \
-            -u "$SSH_USER" \
-            -vvvv
+          echo '[INFO] 🔑 Déploiement backend avec Ansible...'
+          chmod 600 $SSH_KEY
+          ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini playbook.yml --private-key $SSH_KEY -u ec2-user
         '''
       }
     }
