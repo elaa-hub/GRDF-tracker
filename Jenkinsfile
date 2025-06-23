@@ -20,7 +20,6 @@ pipeline {
     }
 
     stages {
-
         stage('📦 Checkout Backend') {
             steps {
                 dir('backend') {
@@ -81,7 +80,7 @@ pipeline {
                         npm ci --prefer-offline --no-audit
                         rm -f ./node_modules/.ngcc_lock_file
                         npm run build -- --configuration production --no-progress
-                          ls -l ./dist || echo "❌ Dossier dist manquant !" 
+                        ls -l ./dist || echo "❌ Dossier dist manquant !" 
                     '''
                 }
             }
@@ -107,7 +106,7 @@ pipeline {
                     sh '''
                         export CHROME_BIN=$HOME/chrome/google-chrome
                         npx http-server ./dist/GRDF-frontend -p 4200 > server.log &
-                         SERVER_PID=$!
+                        SERVER_PID=$!
                         n=0
                         until curl -s http://localhost:4200 > /dev/null; do
                           sleep 1
@@ -119,7 +118,7 @@ pipeline {
                           fi
                         done
                         echo "✅ Frontend servi sur http://localhost:4200"
-                        npm run test:login || TEST_EXIT=$? 
+                        npx mocha selenium-tests/login.spec.js --reporter mochawesome || TEST_EXIT=$?
                         kill $SERVER_PID || true 
                         exit ${TEST_EXIT:-0}
                     '''
@@ -130,7 +129,22 @@ pipeline {
         stage('🐳 Docker Build Frontend (avec dist)') {
             steps {
                 dir('frontend') {
-                    sh 'docker build -t grdf-frontend .' 
+                    sh 'docker build -t grdf-frontend .'
+                }
+            }
+        }
+
+        stage('📄 Archive Test Reports') {
+            steps {
+                dir('frontend') {
+                    publishHTML(target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'mochawesome-report',
+                        reportFiles: 'mochawesome.html',
+                        reportName: 'Rapport Selenium - Mocha'
+                    ])
                 }
             }
         }
