@@ -10,12 +10,16 @@ export class RequestListComponent implements OnInit {
   emailClient: string = '';
   tasks: any[] = [];
   adresseMaison: string = '';
-  taskNeeded: boolean = false; // ou true si tu veux précocher "urgente"
+  taskNeeded: boolean = false;
   clientId: number = 1;
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    const email = localStorage.getItem('email'); // ✅ stocke l’email lors du login
+    const email = localStorage.getItem('email');
+    if (email) {
+      this.emailClient = email;
+      this.loadClientIdAndTasks(email);
+    }
     this.http.get(`http://localhost:8081/api/clients/client/address?email=${email}`, { responseType: 'text' })
       .subscribe({
         next: (data) => {
@@ -39,10 +43,11 @@ export class RequestListComponent implements OnInit {
     });
   }
 
+
   loadTasksForClient(clientId: number): void {
     this.http.get<any[]>(`http://localhost:8081/api/clients/${clientId}/tasks`).subscribe({
       next: (data) => {
-        this.demandes = data;
+        this.tasks = data;
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des demandes :', err);

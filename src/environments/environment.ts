@@ -1,4 +1,4 @@
 ﻿export const environment = {
   production: true,
-  baseUrl: 'https://grdf-tracker-ella.duckdns.org/api'
+  baseUrl: 'http://35.156.252.94:8081'
 };

@@ -44,8 +44,7 @@ describe('🧪 GRDF Client: Signaler une défaillance', function () {
     try {
       await driver.get('http://grdf-tracker-frontend.s3-website.eu-north-1.amazonaws.com/#/home');
 
-      // ✅ Attente explicite des champs email et mot de passe
-      await driver.wait(until.elementLocated(By.css('[formControlName="email"]')), 15000);
+      await driver.wait(until.elementLocated(By.css('input[formcontrolname="email"]')), 15000);
       await driver.wait(until.elementLocated(By.css('[formControlName="password"]')), 15000);
 
       const emailInput = await driver.findElement(By.css('[formControlName="email"]'));
