@@ -44,11 +44,11 @@ describe('🧪 GRDF Client: Signaler une défaillance', function () {
     try {
       await driver.get('http://grdf-tracker-frontend.s3-website.eu-north-1.amazonaws.com/#/home');
 
-      await driver.wait(until.elementLocated(By.css('input[formcontrolname="email"]')), 15000);
-      await driver.wait(until.elementLocated(By.css('[formControlName="password"]')), 15000);
+      await driver.wait(until.elementLocated(By.css('input[name="email"]')), 15000);
+      await driver.wait(until.elementLocated(By.css('input[name="password"]')), 15000);
 
-      const emailInput = await driver.findElement(By.css('[formControlName="email"]'));
-      const passwordInput = await driver.findElement(By.css('[formControlName="password"]'));
+      const emailInput = await driver.findElement(By.css('input[name="email"]'));
+      const passwordInput = await driver.findElement(By.css('input[name="password"]'));
 
       await emailInput.sendKeys('newclient@mail.com');
       await passwordInput.sendKeys('12345');
